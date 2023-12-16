@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app_manager/models/dish.dart';
+import 'package:flutter_app_manager/views_app/menu_Table.dart';
 
 class Menu_Dish extends StatefulWidget {
   const Menu_Dish({super.key});
@@ -54,6 +55,24 @@ class _MenuDishState extends State<Menu_Dish> {
 
         backgroundColor: Colors.blueAccent,
         actions: <Widget>[
+          IconButton(
+            icon: Icon(Icons.fastfood),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => Menu_Dish()),
+              );
+            },
+          ),
+          IconButton(
+            icon: Icon(Icons.event_seat),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => Menu_Table()),
+              );
+            },
+          ),
           IconButton(
             icon: Icon(Icons.search),
             onPressed: () {

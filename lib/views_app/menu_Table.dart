@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app_manager/models/table.dart';
+import 'package:flutter_app_manager/views_app/menu_dish.dart';
 
 class Menu_Table extends StatefulWidget {
   @override
@@ -31,15 +32,56 @@ class _TableListState extends State<Menu_Table> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: ListView.builder(
+      appBar: AppBar(
+        title: Text('AppBar Demo'),
+        actions: <Widget>[
+          IconButton(
+            icon: Icon(Icons.fastfood),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => Menu_Dish()),
+              );
+            },
+          ),
+          IconButton(
+            icon: Icon(Icons.event_seat),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => Menu_Table()),
+              );
+            },
+          ),
+        ],
+      ),
+      body: GridView.builder(
+        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 2, // Số lượng cột trong GridView
+        ),
         itemCount: tables.length,
         itemBuilder: (context, index) {
-          return ListTile(
-            title: Text(tables[index].nametable),
-            subtitle: Text(tables[index].status),
+          return GestureDetector( // Thêm GestureDetector để xử lý sự kiện nhấn
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => AddDishToTable(table: tables[index])), // Mở trang chọn món ăn
+              );
+            },
+            child: Card( // Sử dụng Card để tạo từng ô
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Text(tables[index].nametable),
+                  Text(tables[index].status),
+                ],
+              ),
+            ),
           );
         },
       ),
+
+
     );
   }
 }
