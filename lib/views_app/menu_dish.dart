@@ -47,8 +47,38 @@ class _MenuDishState extends State<Menu_Dish> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Dish List'),
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back, color: Colors.white),
+          onPressed: () => Navigator.of(context).pop(),
+        ),
+
         backgroundColor: Colors.blueAccent,
+        actions: <Widget>[
+          IconButton(
+            icon: Icon(Icons.search),
+            onPressed: () {
+              // Thêm hành động tìm kiếm của bạn ở đây
+            },
+          ),
+          IconButton(
+            icon: Icon(Icons.notifications),
+            onPressed: () {
+              // Thêm hành động thông báo của bạn ở đây
+            },
+          ),
+          IconButton(
+            icon: const Icon(Icons.refresh),
+            onPressed: () {
+              // Thêm hành động làm mới của bạn ở đây
+            },
+          ),
+          IconButton(
+            icon: Icon(Icons.settings),
+            onPressed: () {
+              // Thêm hành động cài đặt của bạn ở đây
+            },
+          ),
+        ],
       ),
       body: Padding(
         padding: EdgeInsets.all(8.0),
