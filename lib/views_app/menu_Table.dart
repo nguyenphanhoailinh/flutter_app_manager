@@ -63,10 +63,6 @@ class _TableListState extends State<Menu_Table> {
         itemBuilder: (context, index) {
           return GestureDetector( // Thêm GestureDetector để xử lý sự kiện nhấn
             onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => AddDishToTable(table: tables[index])), // Mở trang chọn món ăn
-              );
             },
             child: Card( // Sử dụng Card để tạo từng ô
               child: Column(
