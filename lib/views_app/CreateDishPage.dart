@@ -79,7 +79,7 @@ class _CreateDishPageState extends State<CreateDishPage> {
                   ),
                 )
                     : Icon(
-                  Icons.add_a_photo,
+                  Icons.camera_enhance,
                   size: 40,
                   color: Colors.grey,
                 ),

@@ -44,15 +44,6 @@ class _TableListState extends State<Menu_Table> {
               );
             },
           ),
-          IconButton(
-            icon: Icon(Icons.event_seat),
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => Menu_Table()),
-              );
-            },
-          ),
         ],
       ),
       body: GridView.builder(

@@ -56,41 +56,24 @@ class _MenuDishState extends State<Menu_Dish> {
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: Colors.white),
+          icon: Icon(Icons.chevron_left, color: Colors.white),
           onPressed: () => Navigator.of(context).pop(),
         ),
         backgroundColor: Colors.blueAccent,
         actions: <Widget>[
 
           PopupMenuButton<String>(
-            icon: Icon(Icons.settings),
+            icon: Icon(Icons.add_to_photos),
             onSelected: (String result) {
-              switch (result) {
-                case 'Thêm món ăn':
                   Navigator.push(
                     context,
                     MaterialPageRoute(builder: (context) => CreateDishPage()),
                   );
-                  break;
-                case 'Sửa món':
-                  break;
-                case 'Xóa món ăn':
-                // Thêm hành động của bạn ở đây
-                  break;
-              }
             },
             itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
               const PopupMenuItem<String>(
                 value: 'Thêm món ăn',
-                child: Text('Thêm món ăn'),
-              ),
-              const PopupMenuItem<String>(
-                value: 'Sửa món',
-                child: Text('Sửa món'),
-              ),
-              const PopupMenuItem<String>(
-                value: 'Xóa món ăn',
-                child: Text('Xóa món ăn'),
+                child: Text('Thêm món ăn mới'),
               ),
             ],
           ),
@@ -162,7 +145,7 @@ class _MenuDishState extends State<Menu_Dish> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text('${dishes[index].iddish}'),
+                          // Text('${dishes[index].iddish}'),
                           Text(
                             dishes[index].namedish,
                             style: TextStyle(fontWeight: FontWeight.bold),

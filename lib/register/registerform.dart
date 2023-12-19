@@ -5,7 +5,7 @@ import 'package:flutter_app_manager/login/loginform.dart';
 
 class RegisterForm extends StatefulWidget {
   @override
-  _RegisterFormState createState() => _RegisterFormState();
+  _RegisterFormState createState() => _RegisterFormState  ();
 }
 
 
@@ -20,70 +20,133 @@ class _RegisterFormState extends State<RegisterForm> {
     final String password = _passwordController.text;
     final String fullname = _fullnameController.text;
 
+    // Kiểm tra xem người dùng có nhập tất cả các trường hay không
+    if (username.trim().isEmpty || password.trim().isEmpty || fullname.trim().isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Vui lòng nhập tất cả các trường'),
+          backgroundColor: Colors.red,
+        ),
+      );
+      return;
+    }
+
+    // Kiểm tra xem email đã được tạo tài khoản hay chưa
+    try {
+      final response = await dio.post("/signin",
+          data: User(username: username, password: 'dummy_password', fullname: fullname).toJson());
+      if (response.statusCode == 200 || response.statusCode == 401) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Email đã được tạo tài khoản'),
+            backgroundColor: Colors.red,
+          ),
+        );
+        return;
+      }
+    } catch (e) {
+      // Email chưa được tạo tài khoản, tiếp tục đăng ký
+    }
+
     final response = await dio.post("/signup",
         data: User(username: username, password: password, fullname: fullname).toJson());
     if (response.statusCode == 200) {
       // Xử lý đăng ký thành công
       ScaffoldMessenger.of(context).showSnackBar(
-        const  SnackBar(
+        const SnackBar(
           content: Text('Đăng ký thành công'),
           backgroundColor: Colors.green,
         ),
       );
     } else {
+      // Xử lý đăng ký thất bại
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text('Đăng ký thất bại'),
-          backgroundColor: Colors.green,
+          backgroundColor: Colors.red,
         ),
-      );// Xử lý đăng ký thất bại
+      );
     }
   }
+
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(
-        children: [
-          TextField(
-            controller: _fullnameController,
-            decoration: const InputDecoration(labelText: 'Họ và tên'),
-          ),
-          TextField(
-            controller: _usernameController,
-            decoration: const InputDecoration(labelText: 'email đăng nhập'),
-          ),
-          TextField(
-            controller: _passwordController,
-            decoration: const InputDecoration(labelText: 'Mật khẩu'),
-            obscureText: true,
-          ),
-
-          ElevatedButton(
-            onPressed: _register,
-            child: const Text('Đăng ký'),
-          ),
-          TextButton(
-            child: const Text(
-              "bạn đã có tài khoản? Đăng nhập",
-              style: TextStyle(
-                color: Colors.white,
-                fontWeight: FontWeight.bold,
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: ListView(
+          children: [
+            const SizedBox(height: 50),
+            Center(
+              child: const Text(
+                'Đăng ký',
+                style: TextStyle(
+                  fontSize: 30,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
             ),
-            style: TextButton.styleFrom(
-              backgroundColor: Colors.blue,
+            const SizedBox(height: 50),
+            TextField(
+              controller: _fullnameController,
+              decoration: InputDecoration(
+                labelText: 'Họ và tên',
+                border: OutlineInputBorder(),
+                prefixIcon: const Icon(Icons.person),
+              ),
             ),
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => LoginForm()),
-              );
-            },
-          ),
-        ],
+            const SizedBox(height: 10),
+            TextField(
+              controller: _usernameController,
+              decoration: InputDecoration(
+                labelText: 'Email đăng nhập',
+                border: OutlineInputBorder(),
+                prefixIcon: const Icon(Icons.email),
+              ),
+            ),
+            const SizedBox(height: 10),
+            TextField(
+              controller: _passwordController,
+              decoration: InputDecoration(
+                labelText: 'Mật khẩu',
+                border: OutlineInputBorder(),
+                prefixIcon: const Icon(Icons.lock),
+              ),
+              obscureText: true,
+            ),
+            const SizedBox(height: 20),
+            ElevatedButton(
+              onPressed: _register,
+              child: const Text('Đăng ký'),
+              style: ElevatedButton.styleFrom(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                primary: Colors.blue,
+                onPrimary: Colors.white,
+                padding: const EdgeInsets.symmetric(horizontal: 80, vertical: 10),
+              ),
+            ),
+            const SizedBox(height: 10),
+            TextButton(
+              child: const Text(
+                "Bạn đã có tài khoản? Đăng nhập",
+                style: TextStyle(
+                  color: Colors.blue,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => LoginForm()),
+                );
+              },
+            ),
+          ],
+        ),
       ),
     );
   }
-
 }
