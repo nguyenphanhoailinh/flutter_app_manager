@@ -2,8 +2,8 @@ import 'package:flutter_app_manager/models/signin.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app_manager/register/registerform.dart';
-import 'package:flutter_app_manager/views_app/menu_Table.dart';
-import 'package:flutter_app_manager/views_app/menu_dish.dart';
+import 'package:flutter_app_manager/views_app/View_Table/menu_Table.dart';
+import 'package:flutter_app_manager/views_app/View_Menu/menu_dish.dart';
 
 
 class LoginForm extends StatefulWidget {
@@ -58,6 +58,8 @@ class _LoginFormState extends State<LoginForm> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Color.fromARGB(255, 50, 73, 113),
+
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Center(
@@ -70,47 +72,57 @@ class _LoginFormState extends State<LoginForm> {
                   style: TextStyle(
                     fontSize: 32,
                     fontWeight: FontWeight.bold,
+                    color: Colors.black87,
+
                   ),
                 ),
                 const SizedBox(height: 30),
                 TextField(
                   controller: _usernameController,
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                     labelText: 'Nhập email',
+                      labelStyle: TextStyle(
+                          color: Colors.black87
+                      ),
                     border: OutlineInputBorder(),
-                    prefixIcon: const Icon(Icons.email),
+                    prefixIcon: Icon(Icons.email)
                   ),
                 ),
                 const SizedBox(height: 10),
                 TextField(
                   controller: _passwordController,
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                     labelText: 'Nhập mật khẩu',
+                    labelStyle: TextStyle(
+                      color: Colors.black87
+                    ),
                     border: OutlineInputBorder(),
-                    prefixIcon: const Icon(Icons.lock),
+                    prefixIcon: Icon(Icons.lock),
                   ),
                   obscureText: true,
                 ),
-                const SizedBox(height: 20),
+                const SizedBox(height: 24),
                 ElevatedButton(
                   onPressed: _login,
-                  child: const Text('Đăng nhập'),
+                  child: const Text('Đăng nhập',
+                    style: TextStyle(
+                    color: Colors.black54,
+                    fontWeight: FontWeight.bold,
+                  ),
+                  ),
                   style: ElevatedButton.styleFrom(
                     minimumSize: const Size(double.infinity, 50), // full width
                   ),
+
                 ),
                 const SizedBox(height: 10),
                 TextButton(
                   child: const Text(
-                    "Bạn chưa có tài khoản? Đăng ký",
+                    "Bạn chưa có tài khoản? Đăng Ký",
                     style: TextStyle(
-                      color: Colors.white,
+                      color: Colors.blue,
                       fontWeight: FontWeight.bold,
                     ),
-                  ),
-                  style: TextButton.styleFrom(
-                    backgroundColor: Colors.blue,
-                    minimumSize: const Size(double.infinity, 50), // full width
                   ),
                   onPressed: () {
                     Navigator.push(

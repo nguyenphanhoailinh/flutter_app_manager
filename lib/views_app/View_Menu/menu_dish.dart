@@ -1,10 +1,7 @@
-import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app_manager/models/dish.dart';
-import 'package:flutter_app_manager/views_app/CreateDishPage.dart';
-import 'package:flutter_app_manager/views_app/menu_Table.dart';
-
+import 'package:flutter_app_manager/views_app/View_Menu/CreateDishPage.dart';
 import 'Edit_Dish.dart';
 
 class Menu_Dish extends StatefulWidget {
@@ -40,6 +37,19 @@ class _MenuDishState extends State<Menu_Dish> {
       throw Exception('Failed to connect to API');
     }
   }
+  Future<void> deleteDish(int id) async {
+    try {
+      final response = await dio.delete("/delete/$id");
+      if (response.statusCode == 200) {
+        print('Dish deleted successfully');
+      } else {
+        throw Exception('Failed to delete dish');
+      }
+    } catch (error) {
+      print('Error: $error');
+      throw Exception('Failed to connect to API');
+    }
+  }
 
 
   @override
@@ -54,7 +64,9 @@ class _MenuDishState extends State<Menu_Dish> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: const Color.fromARGB(255, 50, 73, 113),
       appBar: AppBar(
+        title: Text('Danh sách món ăn '),
         leading: IconButton(
           icon: Icon(Icons.chevron_left, color: Colors.white),
           onPressed: () => Navigator.of(context).pop(),
@@ -112,6 +124,7 @@ class _MenuDishState extends State<Menu_Dish> {
                         TextButton(
                           child: Text('Xóa'),
                           onPressed: () {
+                            deleteDish(dishes[0].iddish);
                           },
                         ),
                       ],
@@ -152,7 +165,7 @@ class _MenuDishState extends State<Menu_Dish> {
                           ),
                           SizedBox(height: 10),
                           Text(
-                            'Price: \$${dishes[index].price.toStringAsFixed(2)}',
+                            '\$${dishes[index].price.toStringAsFixed(2)}',
                           ),
                         ],
                       ),

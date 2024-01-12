@@ -1,7 +1,9 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app_manager/models/table.dart';
-import 'package:flutter_app_manager/views_app/menu_dish.dart';
+import 'package:flutter_app_manager/views_app/View_Menu/menu_dish.dart';
+
+import 'Order_Dish.dart';
 
 class Menu_Table extends StatefulWidget {
   @override
@@ -33,7 +35,7 @@ class _TableListState extends State<Menu_Table> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('AppBar Demo'),
+        title: Text('AppBar '),
         actions: <Widget>[
           IconButton(
             icon: Icon(Icons.fastfood),
@@ -54,6 +56,10 @@ class _TableListState extends State<Menu_Table> {
         itemBuilder: (context, index) {
           return GestureDetector( // Thêm GestureDetector để xử lý sự kiện nhấn
             onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => OrderDishPage(tableName: tables[index].nametable)),
+              );
             },
             child: Card( // Sử dụng Card để tạo từng ô
               child: Column(
@@ -67,8 +73,6 @@ class _TableListState extends State<Menu_Table> {
           );
         },
       ),
-
-
     );
   }
 }
