@@ -2,6 +2,8 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app_manager/models/table.dart';
 
+import '../View_Menu/menu_dish.dart';
+
 class CreateTableForm extends StatefulWidget {
   @override
   _CreateTableFormState createState() => _CreateTableFormState();
@@ -36,6 +38,26 @@ class _CreateTableFormState extends State<CreateTableForm> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: const Text('Tạo bàn'),
+        leading: IconButton(
+          icon: const Icon(Icons.chevron_left, color: Colors.white),
+          onPressed: () => Navigator.of(context).pop(),
+        ),
+        actions: <Widget>[
+          IconButton(
+            icon: Icon(Icons.fastfood),
+            onPressed: () {
+
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => Menu_Dish()),
+              );
+            },
+          ),
+
+        ],
+      ),
       body: Column(
         children: [
           TextField(

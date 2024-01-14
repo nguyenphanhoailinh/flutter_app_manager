@@ -4,6 +4,7 @@ import 'package:flutter_app_manager/models/table.dart';
 import 'package:flutter_app_manager/views_app/View_Menu/menu_dish.dart';
 
 import 'Order_Dish.dart';
+import 'create_Table.dart';
 
 class Menu_Table extends StatefulWidget {
   @override
@@ -21,7 +22,7 @@ class _TableListState extends State<Menu_Table> {
   }
 
   Future<void> _fetchTables() async {
-    final response = await dio.get("/tables"); // Thay "/tables" bằng đường dẫn API của bạn
+    final response = await dio.get("/tables");
     if (response.statusCode == 200) {
       setState(() {
         tables = (response.data as List).map((item) => TableB.fromJson(item)).toList();
@@ -31,11 +32,18 @@ class _TableListState extends State<Menu_Table> {
     }
   }
 
+  // Phương thức để cập nhật trạng thái của bàn
+  static void updateTableStatus(String tableName, String newStatus) {
+    // Triển khai logic cập nhật trạng thái của bàn ở đây
+    // Ví dụ:
+    // Cập nhật trạng thái của bàn có tableName thành newStatus
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('AppBar '),
+        title: Text('Bàn'),
         actions: <Widget>[
           IconButton(
             icon: Icon(Icons.fastfood),
@@ -46,22 +54,37 @@ class _TableListState extends State<Menu_Table> {
               );
             },
           ),
+
+          IconButton(
+            icon: Icon(Icons.view_agenda),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => CreateTableForm()),
+              );
+            },
+          ),
         ],
       ),
       body: GridView.builder(
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 2, // Số lượng cột trong GridView
+          crossAxisCount: 2,
         ),
         itemCount: tables.length,
         itemBuilder: (context, index) {
-          return GestureDetector( // Thêm GestureDetector để xử lý sự kiện nhấn
+          return GestureDetector(
             onTap: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => OrderDishPage(tableName: tables[index].nametable)),
+                MaterialPageRoute(
+                  builder: (context) => OrderDishPage(
+                    tableName: tables[index].nametable,
+                    updateTableStatus: updateTableStatus, // Truyền phương thức cập nhật trạng thái của bàn
+                  ),
+                ),
               );
             },
-            child: Card( // Sử dụng Card để tạo từng ô
+            child: Card(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
