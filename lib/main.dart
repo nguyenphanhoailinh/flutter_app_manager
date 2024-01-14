@@ -16,10 +16,11 @@ class MyApp extends StatelessWidget {const MyApp({super.key});
   Widget build(BuildContext context) {
     return  MaterialApp(
       debugShowCheckedModeBanner: false,
+      routes: {
+        '/menuTable': (context) => Menu_Table(),
+      },
       home: Scaffold(
-
         body: Menu_Table() ,
-
       ),
     );
   }

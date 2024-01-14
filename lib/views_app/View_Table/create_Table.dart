@@ -1,6 +1,8 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_app_manager/models/Status.dart';
 import 'package:flutter_app_manager/models/table.dart';
+import 'package:flutter_app_manager/models/tableA.dart';
 
 import '../View_Menu/menu_dish.dart';
 
@@ -17,7 +19,7 @@ class _CreateTableFormState extends State<CreateTableForm> {
     final String name = _nameController.text;
 
     final response = await dio.post("/create",
-        data: TableB(nametable: name, status: "CÒN_TRỐNG").toJson());
+        data: TableA(nametable: name, status:Status.conTrong).toJson());
     if (response.statusCode == 200) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
@@ -42,7 +44,8 @@ class _CreateTableFormState extends State<CreateTableForm> {
         title: const Text('Tạo bàn'),
         leading: IconButton(
           icon: const Icon(Icons.chevron_left, color: Colors.white),
-          onPressed: () => Navigator.of(context).pop(),
+          onPressed: () =>
+              Navigator.of(context).pop(),
         ),
         actions: <Widget>[
           IconButton(

@@ -1,14 +1,24 @@
+import 'dart:convert';
+
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
+import 'package:flutter_app_manager/models/Status.dart';
+import 'package:flutter_app_manager/models/order.dart';
+import 'package:flutter_app_manager/models/orderdish.dart';
+import 'package:flutter_app_manager/models/table.dart';
 import '../../models/dish.dart';
 import 'Menu_Table.dart';
 
 class OrderDishPage extends StatefulWidget {
   final String tableName;
+  final int idtable;
+  
+
   final Function(String, String) updateTableStatus;
+  // Order orders;
 
-
-  const OrderDishPage({Key? key, required this.tableName, required this.updateTableStatus}) : super(key: key);
+  const OrderDishPage({Key? key, required this.tableName,required this.idtable, required this.updateTableStatus}) : super(key: key);
 
   @override
   _OrderDishPageState createState() => _OrderDishPageState();
@@ -17,10 +27,14 @@ class OrderDishPage extends StatefulWidget {
 class _OrderDishPageState extends State<OrderDishPage> {
   int numberOfDishes = 0;
   List<Dish> selectedDishes = [];
+  List<Dish> orderedDishes =[];
   double totalAmount = 0.0;
-
+  // Order order;
   List<Dish> allDishes = [];
   Dio dio = Dio(BaseOptions(baseUrl: "http://localhost:8888/api/v1/dishs"));
+
+  Dio dio1 = Dio(BaseOptions(baseUrl: "http://localhost:8888/api/v1/orders"));
+
 
   Future<List<Dish>> fetchDishes() async {
     try {
@@ -42,32 +56,117 @@ class _OrderDishPageState extends State<OrderDishPage> {
     }
   }
 
+  Future<Order> createOrder(Order order) async {
+    OrderDish orderDish = OrderDish(
+      iddish: selectedDishes.map((e) => e.iddish).toList(),
+      // Danh sách các món ăn đã chọn
+      ngaygiodat: DateTime.now(),
+      // Thời gian hiện tại
+      idtable: widget.idtable,
+      // Trạng thái đơn hàng
+      totalAmount: calculateTotalAmount(
+        selectedDishes,),
+    );
+    String jsonOrder = jsonEncode(orderDish.toJson());
+    try {
+      final response = await dio1.post(
+        "/new", // Đường dẫn của API để tạo đơn hàng mới
+        data: jsonOrder,
+        options: Options(
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        ),
+      );
+
+      if (response.statusCode == 201 && response.data != null) {
+        var data = response.data as Map<String, dynamic>;
+        if (data != null) {
+          return Order.fromJson(data); // Chuyển đổi dữ liệu trả về thành đối tượng Order
+        } else {
+          throw Exception('Failed to convert the response data');
+        }
+      } else {
+        throw Exception('Failed to create order');
+      }
+    } catch (error) {
+      print('Error: $error');
+      throw Exception('Failed to connect to API');
+    }
+  }
+  Future<List<Order>> getOrdersByTableId(int idtable) async {
+    try {
+      final response = await dio1.get("/$idtable");
+      if (response.statusCode == 200) {
+        List<dynamic> jsonResponse = response.data;
+        if (jsonResponse is List) {
+          return jsonResponse.map((item) => Order.fromJson(item)).toList();
+        } else {
+          throw Exception('Invalid data format');
+        }
+      } else {
+        throw Exception('Failed to load dishes from API');
+      }
+    } catch (error) {
+      print('Error: $error');  // Thêm dòng này để in ra thông báo lỗi cụ thể
+      throw Exception('Failed to connect to API');
+    }
+  }
+
+
+
+  void handleSaveOrder(Order order) {
+    createOrder(order).then((createOrder) {
+      // Xử lý savedOrder ở đây
+    }).catchError((error) {
+      // Xử lý lỗi ở đây
+    });
+  }
+
   @override
   void initState() {
     super.initState();
     fetchDishes().then((dishes) {
       setState(() {
         allDishes = dishes;
+        selectedTable = TableB(
+          idtable: widget.idtable,
+          nametable: widget.tableName,
+          status: Status.dangSuDung,
+          // Đặt các thuộc tính khác của bàn ở đây
+        );
+        
       });
     });
   }
 
+    late TableB selectedTable;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+
       appBar: AppBar(
+
         title: Text(widget.tableName),
       ),
+      backgroundColor: const Color.fromARGB(255, 50, 73, 113),
       body: Row(
         children: <Widget>[
           Expanded(
-            flex: 1,
+            flex: 2,
             child: Material(
               child: Column(
+
                 children: <Widget>[
-                  ListTile(
-                    leading: Icon(Icons.food_bank),
-                    subtitle: Text('$numberOfDishes món ăn'),
+                  const ListTile(
+                    leading: Icon(Icons.shopping_basket),
+                    subtitle: Column(
+                      // mainAxisAlignment: MainAxisAlignment.center,
+                      // children: <Widget>[
+                      //   Icon(Icons.shopping_basket),
+                      //   //Text('Gọi món ăn tại đây'),
+                      // ],
+                    ),
                   ),
                   ElevatedButton(
                     onPressed: () {
@@ -77,20 +176,90 @@ class _OrderDishPageState extends State<OrderDishPage> {
                           return ListView.builder(
                             itemCount: allDishes.length,
                             itemBuilder: (context, index) {
-                              return ListTile(
-                                title: Text(allDishes[index].namedish),
-                                onTap: () {
-                                  addDish(allDishes[index]);
-                                  Navigator.pop(context);
-                                },
+                              return Card(
+                                child: ListTile(
+                                  leading: CircleAvatar(
+                                    backgroundImage: NetworkImage(allDishes[index].imagefilename), // Hiển thị hình ảnh
+                                    radius: 30, // Điều chỉnh kích thước hình ảnh
+                                  ),
+                                  title: Text(
+                                    allDishes[index].namedish, // Hiển thị tên món ăn
+                                    style: const TextStyle(
+                                      fontSize: 20, // Điều chỉnh kích thước chữ
+                                      fontWeight: FontWeight.bold, // Đặt chữ đậm
+                                    ),
+                                  ),
+                                  subtitle: Text(
+                                    'Giá: ${allDishes[index].price}', // Hiển thị giá
+                                    style: const TextStyle(
+                                      fontSize: 16, // Điều chỉnh kích thước chữ
+                                    ),
+                                  ),
+                                  onTap: () {
+                                    addDish(allDishes[index]);
+                                    Navigator.pop(context);
+                                  },
+                                ),
                               );
                             },
                           );
                         },
                       );
                     },
-                    child: Text('GỌI MÓN'),
+                    child: const Padding(
+                      padding: EdgeInsets.only(right: 0),
+
+                      child: Text(' Gọi Món'),
+                    ),
                   ),
+                  // Thêm FutureBuilder vào đây
+                Expanded(
+                    flex: 1,
+                  child:FutureBuilder<List<Order>>(
+                    future: getOrdersByTableId(widget.idtable),
+                    builder: (context, snapshot) {
+                      if (snapshot.hasData) {
+                        return ListView.builder(
+                          itemCount: snapshot.data!.length,
+                          itemBuilder: (context, index) {
+                            return ExpansionTile(
+                              title: const Padding(
+                                padding: EdgeInsets.only(bottom: 8.0,top: 30.0), // Tạo khoảng cách dưới tiêu đề
+                                child: Text('Các món đã gọi'),
+                              ),
+                              subtitle: Text('Ngày Đặt: ${snapshot.data![index].ngaygiodat}'),
+                              children: <Widget>[
+                                ...snapshot.data![index].dishes.map((dish) {
+                                  return ListTile(
+                                    leading: CircleAvatar(
+                                      backgroundImage: NetworkImage('${dish.imagefilename}'),
+                                      radius: 30.0, // Điều chỉnh kích thước của hình ảnh
+                                    ),
+                                    title: Text('${dish.namedish}'),
+                                    subtitle: Text('\$${dish.price}'),
+                                  );
+                                }).toList(),
+                                Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Text('Tổng Số Tiền: ${snapshot.data![index].totalAmount}', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+                                ),
+                                ElevatedButton(
+                                  onPressed: () {
+                                    // Thêm hành động của bạn khi nút được nhấn ở đây
+                                  },
+                                  child: const Text('Thanh toán'),
+                                ),
+                              ],
+                            );
+                          },
+                        );
+                      } else if (snapshot.hasError) {
+                        return Text("${snapshot.error}");
+                      }
+                      return CircularProgressIndicator();
+                    },
+                  )
+                ),
                 ],
               ),
             ),
@@ -102,27 +271,79 @@ class _OrderDishPageState extends State<OrderDishPage> {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: <Widget>[
                   ListTile(
-                    title: Text('Danh sách món ăn đã chọn'),
+                    title: const Text('Danh sách món ăn đã chọn'),
                     subtitle: Column(
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: selectedDishes
-                          .map((dish) => Text(
-                        '${dish.namedish} - \$${dish.price.toStringAsFixed(2)}',
-                        style: TextStyle(fontWeight: FontWeight.bold),
+                          .map((dish) => Padding(
+                        padding: const EdgeInsets.all(8.0), // Thêm padding
+                        child: Row(
+                          children: [
+                            CircleAvatar(
+                              backgroundImage: NetworkImage(
+                                dish.imagefilename, // Hiển thị hình ảnh từ mạng
+                              ),
+                              radius: 30, // Điều chỉnh kích thước hình ảnh
+                            ),
+                            const SizedBox(width: 10), // Tạo khoảng cách giữa hình ảnh và văn bản
+                            Expanded( // Sử dụng Expanded để văn bản không bị cắt
+                              child: Text(
+                                '${dish.namedish} - \$${dish.price.toStringAsFixed(2)}',
+                                style: const TextStyle(fontWeight: FontWeight.bold),
+                              ),
+                            ),
+                          ],
+                        ),
                       ))
                           .toList(),
                     ),
                   ),
-                  Divider(),
+                  const Divider(),
                   ListTile(
-                    title: Text('Tổng cộng'),
+                    title: const Text('Tổng cộng'),
                     subtitle: Text('\$${totalAmount.toStringAsFixed(2)}'),
                   ),
-                  ElevatedButton(
-                    onPressed: confirmOrder,
-                    child: Text('XÁC NHẬN ĐƠN HÀNG'),
-                  ),
-                ],
+            ElevatedButton(
+              onPressed: () async {
+                if (selectedTable == null) {
+                  // Hiển thị thông báo lỗi nếu không có bàn nào được chọn
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text('Vui lòng chọn một bàn trước khi tạo đơn hàng.')),
+                  );
+                } else {
+                  try {
+                    // Tạo một đối tượng Order từ danh sách các món ăn đã chọn
+                    Order order = Order(
+                      dishes: selectedDishes,
+                      // Danh sách các món ăn đã chọn
+                      ngaygiodat: DateTime.now(),
+                      table: selectedTable,
+                      status: Status.dangSuDung,
+                      totalAmount: calculateTotalAmount(
+                          selectedDishes),
+                        idorder:null// Tính tổng số tiền
+                    );
+
+                    // Gửi đối tượng Order đến máy chủ
+                    await createOrder(order);
+
+                    // Hiển thị thông báo thành công
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                          content: Text('Đơn hàng đã được tạo thành công!')),
+                    );
+                  } catch (e) {
+                    // // Hiển thị thông báo lỗi
+                    // ScaffoldMessenger.of(context).showSnackBar(
+                    //   SnackBar(content: Text('Không thể tạo đơn hàng: $e')),
+                    // );
+                  }
+                }
+              },
+              child: const Text('XÁC NHẬN ĐƠN HÀNG'),
+            ),
+
+            ],
               ),
             ),
           ),
@@ -138,40 +359,18 @@ class _OrderDishPageState extends State<OrderDishPage> {
       totalAmount += dish.price;
     });
   }
-
-  void confirmOrder() async {
-    try {
-      List<int> dishIds = selectedDishes.map((dish) => dish.iddish!).toList();
-
-
-      final response = await dio.post("/api/v1/orders/create", data: {
-        "dishes": dishIds,
-        "user": getCurrentUsername,
-        "table": widget.nametable,
-        "ngaygiodat": DateTime.now().toIso8601String(),
-        "status": "ĐANG_SỬ_DỤNG",
-      });
-
-      if (response.statusCode == 200) {
-        print('Confirmed Order');
-        print(
-            'Selected Dishes: ${selectedDishes.map((dish) => '${dish.namedish} - \$${dish.price.toStringAsFixed(2)}').toList()}');
-        print('Total Amount: \$${totalAmount.toStringAsFixed(2)}');
-        clearSelectedDishes();
-
-        // Gọi phương thức để cập nhật trạng thái trang danh sách bàn
-        widget.updateTableStatus(widget.tableName, 'ĐANG_SỬ_DỤNG');
-
-        // Pop về trang trước đó (Menu_Table)
-        Navigator.pop(context);
-      } else {
-        print('Failed to confirm order. ${response.data}');
-      }
-    } catch (error) {
-      print('Error: $error');
+  double calculateTotalAmount(List<Dish> dishes) {
+    double total = 0.0;
+    for (var dish in dishes) {
+      total += dish.price;
     }
+    return total;
   }
-
+  void onConfirmOrder() {
+    setState(() {
+      orderedDishes = List.from(selectedDishes); // Lưu các món ăn đã chọn
+    });
+  }
 
   void clearSelectedDishes() {
     setState(() {

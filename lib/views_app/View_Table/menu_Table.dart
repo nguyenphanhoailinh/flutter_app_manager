@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_app_manager/models/Status.dart';
 import 'package:flutter_app_manager/models/table.dart';
 import 'package:flutter_app_manager/views_app/View_Menu/menu_dish.dart';
 
@@ -12,17 +13,11 @@ class Menu_Table extends StatefulWidget {
 }
 
 class _TableListState extends State<Menu_Table> {
-  Dio dio = Dio(BaseOptions(baseUrl: "http://localhost:8888/api/v1"));
+  Dio dio = Dio(BaseOptions(baseUrl: "http://localhost:8888/api/v1/tables"));
   List<TableB> tables = [];
 
-  @override
-  void initState() {
-    super.initState();
-    _fetchTables();
-  }
-
   Future<void> _fetchTables() async {
-    final response = await dio.get("/tables");
+    final response = await dio.get("/all");
     if (response.statusCode == 200) {
       setState(() {
         tables = (response.data as List).map((item) => TableB.fromJson(item)).toList();
@@ -37,6 +32,14 @@ class _TableListState extends State<Menu_Table> {
     // Triển khai logic cập nhật trạng thái của bàn ở đây
     // Ví dụ:
     // Cập nhật trạng thái của bàn có tableName thành newStatus
+  }
+  String statusToString(Status status) {
+    return status.toString().split('.').last;
+  }
+  @override
+  void initState() {
+    super.initState();
+    _fetchTables();
   }
 
   @override
@@ -66,7 +69,9 @@ class _TableListState extends State<Menu_Table> {
           ),
         ],
       ),
+      backgroundColor: const Color.fromARGB(255, 50, 73, 113),
       body: GridView.builder(
+
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 2,
         ),
@@ -79,17 +84,28 @@ class _TableListState extends State<Menu_Table> {
                 MaterialPageRoute(
                   builder: (context) => OrderDishPage(
                     tableName: tables[index].nametable,
+                    idtable: tables[index].idtable,
                     updateTableStatus: updateTableStatus, // Truyền phương thức cập nhật trạng thái của bàn
                   ),
                 ),
               );
             },
             child: Card(
+              shape: RoundedRectangleBorder(
+                side: BorderSide(color: Color.fromARGB(255, 50, 73, 113), width: 2), // Thêm màu sắc cho đường viền
+                borderRadius: BorderRadius.circular(30.0),
+              ),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  Text(tables[index].nametable),
-                  Text(tables[index].status),
+                  Text(
+                    tables[index].nametable,
+                    style: TextStyle(fontWeight: FontWeight.bold), // Làm cho chữ đậm hơn
+                  ),
+                  Text(
+                    statusToString(tables[index].status),
+                    style: TextStyle(fontWeight: FontWeight.bold), // Làm cho chữ đậm hơn
+                  ),
                 ],
               ),
             ),
