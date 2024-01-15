@@ -5,6 +5,7 @@ import 'package:flutter_app_manager/views_app/View_Menu/CreateDishPage.dart';
 import 'Edit_Dish.dart';
 
 class Menu_Dish extends StatefulWidget {
+
   const Menu_Dish({super.key});
 
   @override
@@ -13,7 +14,7 @@ class Menu_Dish extends StatefulWidget {
 
 class _MenuDishState extends State<Menu_Dish> {
   List<Dish> dishes = [];
-
+  late final Dish dish;
   Dio dio = Dio(BaseOptions(baseUrl: "http://localhost:8888/api/v1/dishs"));
 
   Future<List<Dish>> fetchDishes() async {
@@ -33,13 +34,13 @@ class _MenuDishState extends State<Menu_Dish> {
         throw Exception('Failed to load dishes from API');
       }
     } catch (error) {
-      print('Error: $error');  // Thêm dòng này để in ra thông báo lỗi cụ thể
+      print('Error: $error');
       throw Exception('Failed to connect to API');
     }
   }
-  Future<void> deleteDish(int id) async {
+  Future<void> deleteDish(int iddish) async {
     try {
-      final response = await dio.delete("/delete/$id");
+      final response = await dio.delete("/delete/${iddish}");
       if (response.statusCode == 200) {
         print('Dish deleted successfully');
       } else {
@@ -124,7 +125,7 @@ class _MenuDishState extends State<Menu_Dish> {
                         TextButton(
                           child: Text('Xóa'),
                           onPressed: () {
-                            deleteDish(dishes[0].iddish);
+                            deleteDish(dishes[index].iddish);
                           },
                         ),
                       ],
@@ -165,7 +166,7 @@ class _MenuDishState extends State<Menu_Dish> {
                           ),
                           SizedBox(height: 10),
                           Text(
-                            '\$${dishes[index].price.toStringAsFixed(2)}',
+                            '${dishes[index].price.toStringAsFixed(2)}\k',
                           ),
                         ],
                       ),

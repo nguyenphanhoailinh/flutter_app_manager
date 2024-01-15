@@ -18,8 +18,6 @@ class _LoginFormState extends State<LoginForm> {
   Future<void> _login() async {
     final String username = _usernameController.text;
     final String password = _passwordController.text;
-
-    // Kiểm tra xem người dùng có nhập tất cả các trường hay không
     if (username
         .trim()
         .isEmpty || password
@@ -38,7 +36,6 @@ class _LoginFormState extends State<LoginForm> {
       final response = await dio.post("/signin",
           data: User(username: username, password: password).toJson());
       if (response.statusCode == 200) {
-        // Xử lý đăng nhập thành công
         Navigator.push(
             context,
             MaterialPageRoute(builder: (context) => Menu_Table()));

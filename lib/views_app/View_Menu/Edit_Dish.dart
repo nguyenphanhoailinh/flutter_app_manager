@@ -31,7 +31,7 @@ class _EditDishPageState extends State<EditDishPage> {
     pickedImage = await _picker.pickImage(source: ImageSource.gallery);
 
     setState(() {
-      _imageUrl = null; // Reset the image URL to null when a new image is picked
+      _imageUrl = null;
     });
   }
 
@@ -55,9 +55,21 @@ class _EditDishPageState extends State<EditDishPage> {
       final response = await dio.put("/update/${widget.dish.iddish}", data: formData);
 
       if (response.statusCode == 200) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text("Món ăn đã được cập nhật thành công"),
+            backgroundColor: Colors.green,
+          ),
+        );
         print("Món ăn đã được cập nhật thành công");
         print('Data received from API: ${response.data}');
       } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Không thể cập nhật món ăn'),
+            backgroundColor: Colors.red,
+          ),
+        );
         print("Không thể cập nhật món ăn");
       }
     } catch (error) {

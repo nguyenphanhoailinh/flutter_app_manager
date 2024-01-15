@@ -5,7 +5,7 @@ class User {
 
   User({required this.username, required this.password, required this.fullname});
 
-  // Thêm phương thức tạo từJson
+
   factory User.fromJson(Map<String, dynamic> json) {
     return User(
       username: json['username'],

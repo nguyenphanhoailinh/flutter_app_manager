@@ -27,11 +27,7 @@ class _TableListState extends State<Menu_Table> {
     }
   }
 
-  // Phương thức để cập nhật trạng thái của bàn
   static void updateTableStatus(String tableName, String newStatus) {
-    // Triển khai logic cập nhật trạng thái của bàn ở đây
-    // Ví dụ:
-    // Cập nhật trạng thái của bàn có tableName thành newStatus
   }
   String statusToString(Status status) {
     return status.toString().split('.').last;
@@ -85,14 +81,14 @@ class _TableListState extends State<Menu_Table> {
                   builder: (context) => OrderDishPage(
                     tableName: tables[index].nametable,
                     idtable: tables[index].idtable,
-                    updateTableStatus: updateTableStatus, // Truyền phương thức cập nhật trạng thái của bàn
+                    updateTableStatus: updateTableStatus,
                   ),
                 ),
               );
             },
             child: Card(
               shape: RoundedRectangleBorder(
-                side: BorderSide(color: Color.fromARGB(255, 50, 73, 113), width: 2), // Thêm màu sắc cho đường viền
+                side: BorderSide(color: Color.fromARGB(255, 50, 73, 113), width: 2),
                 borderRadius: BorderRadius.circular(30.0),
               ),
               child: Column(
@@ -100,12 +96,12 @@ class _TableListState extends State<Menu_Table> {
                 children: <Widget>[
                   Text(
                     tables[index].nametable,
-                    style: TextStyle(fontWeight: FontWeight.bold), // Làm cho chữ đậm hơn
+                    style: TextStyle(fontWeight: FontWeight.bold),
                   ),
-                  Text(
-                    statusToString(tables[index].status),
-                    style: TextStyle(fontWeight: FontWeight.bold), // Làm cho chữ đậm hơn
-                  ),
+                  // Text(
+                  //   statusToString(tables[index].status),
+                  //   style: TextStyle(fontWeight: FontWeight.bold),
+                  // ),
                 ],
               ),
             ),

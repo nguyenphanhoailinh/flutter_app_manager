@@ -59,18 +59,15 @@ class _OrderDishPageState extends State<OrderDishPage> {
   Future<Order> createOrder(Order order) async {
     OrderDish orderDish = OrderDish(
       iddish: selectedDishes.map((e) => e.iddish).toList(),
-      // Danh sách các món ăn đã chọn
       ngaygiodat: DateTime.now(),
-      // Thời gian hiện tại
       idtable: widget.idtable,
-      // Trạng thái đơn hàng
       totalAmount: calculateTotalAmount(
         selectedDishes,),
     );
     String jsonOrder = jsonEncode(orderDish.toJson());
     try {
       final response = await dio1.post(
-        "/new", // Đường dẫn của API để tạo đơn hàng mới
+        "/new", //
         data: jsonOrder,
         options: Options(
           headers: {
@@ -82,7 +79,7 @@ class _OrderDishPageState extends State<OrderDishPage> {
       if (response.statusCode == 201 && response.data != null) {
         var data = response.data as Map<String, dynamic>;
         if (data != null) {
-          return Order.fromJson(data); // Chuyển đổi dữ liệu trả về thành đối tượng Order
+          return Order.fromJson(data);
         } else {
           throw Exception('Failed to convert the response data');
         }
@@ -108,7 +105,7 @@ class _OrderDishPageState extends State<OrderDishPage> {
         throw Exception('Failed to load dishes from API');
       }
     } catch (error) {
-      print('Error: $error');  // Thêm dòng này để in ra thông báo lỗi cụ thể
+      print('Error: $error');
       throw Exception('Failed to connect to API');
     }
   }
@@ -117,9 +114,7 @@ class _OrderDishPageState extends State<OrderDishPage> {
 
   void handleSaveOrder(Order order) {
     createOrder(order).then((createOrder) {
-      // Xử lý savedOrder ở đây
     }).catchError((error) {
-      // Xử lý lỗi ở đây
     });
   }
 
@@ -133,7 +128,6 @@ class _OrderDishPageState extends State<OrderDishPage> {
           idtable: widget.idtable,
           nametable: widget.tableName,
           status: Status.dangSuDung,
-          // Đặt các thuộc tính khác của bàn ở đây
         );
         
       });
@@ -179,20 +173,20 @@ class _OrderDishPageState extends State<OrderDishPage> {
                               return Card(
                                 child: ListTile(
                                   leading: CircleAvatar(
-                                    backgroundImage: NetworkImage(allDishes[index].imagefilename), // Hiển thị hình ảnh
-                                    radius: 30, // Điều chỉnh kích thước hình ảnh
+                                    backgroundImage: NetworkImage(allDishes[index].imagefilename),
+                                    radius: 30,
                                   ),
                                   title: Text(
-                                    allDishes[index].namedish, // Hiển thị tên món ăn
+                                    allDishes[index].namedish,
                                     style: const TextStyle(
-                                      fontSize: 20, // Điều chỉnh kích thước chữ
-                                      fontWeight: FontWeight.bold, // Đặt chữ đậm
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.bold,
                                     ),
                                   ),
                                   subtitle: Text(
-                                    'Giá: ${allDishes[index].price}', // Hiển thị giá
+                                    'Giá: ${allDishes[index].price}',
                                     style: const TextStyle(
-                                      fontSize: 16, // Điều chỉnh kích thước chữ
+                                      fontSize: 16,
                                     ),
                                   ),
                                   onTap: () {
@@ -212,7 +206,7 @@ class _OrderDishPageState extends State<OrderDishPage> {
                       child: Text(' Gọi Món'),
                     ),
                   ),
-                  // Thêm FutureBuilder vào đây
+
                 Expanded(
                     flex: 1,
                   child:FutureBuilder<List<Order>>(
@@ -224,7 +218,7 @@ class _OrderDishPageState extends State<OrderDishPage> {
                           itemBuilder: (context, index) {
                             return ExpansionTile(
                               title: const Padding(
-                                padding: EdgeInsets.only(bottom: 8.0,top: 30.0), // Tạo khoảng cách dưới tiêu đề
+                                padding: EdgeInsets.only(bottom: 8.0,top: 30.0),
                                 child: Text('Các món đã gọi'),
                               ),
                               subtitle: Text('Ngày Đặt: ${snapshot.data![index].ngaygiodat}'),
@@ -233,19 +227,19 @@ class _OrderDishPageState extends State<OrderDishPage> {
                                   return ListTile(
                                     leading: CircleAvatar(
                                       backgroundImage: NetworkImage('${dish.imagefilename}'),
-                                      radius: 30.0, // Điều chỉnh kích thước của hình ảnh
+                                      radius: 30.0, //
                                     ),
                                     title: Text('${dish.namedish}'),
-                                    subtitle: Text('\$${dish.price}'),
+                                    subtitle: Text('${dish.price}\k'),
                                   );
                                 }).toList(),
                                 Padding(
                                   padding: const EdgeInsets.all(8.0),
-                                  child: Text('Tổng Số Tiền: ${snapshot.data![index].totalAmount}', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+                                  child: Text('Tổng Số Tiền: ${snapshot.data![index].totalAmount}\k', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
                                 ),
                                 ElevatedButton(
                                   onPressed: () {
-                                    // Thêm hành động của bạn khi nút được nhấn ở đây
+
                                   },
                                   child: const Text('Thanh toán'),
                                 ),
@@ -288,7 +282,7 @@ class _OrderDishPageState extends State<OrderDishPage> {
                             const SizedBox(width: 10), // Tạo khoảng cách giữa hình ảnh và văn bản
                             Expanded( // Sử dụng Expanded để văn bản không bị cắt
                               child: Text(
-                                '${dish.namedish} - \$${dish.price.toStringAsFixed(2)}',
+                                '${dish.namedish} - ${dish.price.toStringAsFixed(2)}\k',
                                 style: const TextStyle(fontWeight: FontWeight.bold),
                               ),
                             ),
@@ -301,7 +295,7 @@ class _OrderDishPageState extends State<OrderDishPage> {
                   const Divider(),
                   ListTile(
                     title: const Text('Tổng cộng'),
-                    subtitle: Text('\$${totalAmount.toStringAsFixed(2)}'),
+                    subtitle: Text('${totalAmount.toStringAsFixed(2)}\k '),
                   ),
             ElevatedButton(
               onPressed: () async {

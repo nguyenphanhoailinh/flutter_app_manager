@@ -22,7 +22,7 @@ class _CreateDishPageState extends State<CreateDishPage> {
      pickedImage = await _picker.pickImage(source: ImageSource.gallery);
 
     setState(() {
-      _imageUrl = pickedImage!.path; // You need to upload the image to a server and get the URL
+      _imageUrl = pickedImage!.path;
     });
   }
 
@@ -40,6 +40,12 @@ class _CreateDishPageState extends State<CreateDishPage> {
         if (response.statusCode == 200) {
 
           print("Dish created successfully");
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Tạo món ăn thành công'),
+              backgroundColor: Colors.green,
+            ),
+          );
         } else {
           print("Failed to create dish");
         }
@@ -78,24 +84,24 @@ class _CreateDishPageState extends State<CreateDishPage> {
                     fit: BoxFit.cover,
                   ),
                 )
-                    : Icon(
+                    : const Icon(
                   Icons.camera_enhance,
                   size: 40,
                   color: Colors.grey,
                 ),
               ),
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             TextFormField(
               controller: _dishNameController,
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 labelText: 'Dish Name',
               ),
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             TextFormField(
               controller: _priceController,
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 labelText: 'Price',
               ),
               keyboardType: TextInputType.number,

@@ -20,7 +20,6 @@ class _RegisterFormState extends State<RegisterForm> {
     final String password = _passwordController.text;
     final String fullname = _fullnameController.text;
 
-    // Kiểm tra xem người dùng có nhập tất cả các trường hay không
     if (username.trim().isEmpty || password.trim().isEmpty || fullname.trim().isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
@@ -30,7 +29,6 @@ class _RegisterFormState extends State<RegisterForm> {
       );
       return;
     }
-// Kiểm tra xem chuỗi nhập vào có phải là email hợp lệ hay không
     RegExp regex = RegExp(
         r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$');
     if (!regex.hasMatch(username)) {
@@ -42,7 +40,6 @@ class _RegisterFormState extends State<RegisterForm> {
       );
       return;
     }
-    // Kiểm tra xem email đã được tạo tài khoản hay chưa
     try {
       final response = await dio.post("/signin",
           data: User(username: username, password: 'dummy_password', fullname: fullname).toJson());
@@ -56,13 +53,11 @@ class _RegisterFormState extends State<RegisterForm> {
         return;
       }
     } catch (e) {
-      // Email chưa được tạo tài khoản, tiếp tục đăng ký
     }
 
     final response = await dio.post("/signup",
         data: User(username: username, password: password, fullname: fullname).toJson());
     if (response.statusCode == 200) {
-      // Xử lý đăng ký thành công
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text('Đăng ký thành công'),
