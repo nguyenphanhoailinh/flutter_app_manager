@@ -166,7 +166,7 @@ class _MenuDishState extends State<Menu_Dish> {
                           ),
                           SizedBox(height: 10),
                           Text(
-                            '${dishes[index].price.toStringAsFixed(2)}\k',
+                            '${dishes[index].price.toStringAsFixed(2)}\k  ',
                           ),
                         ],
                       ),
