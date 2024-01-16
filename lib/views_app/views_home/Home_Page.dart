@@ -21,7 +21,7 @@ class _HomePageState extends State<HomePage> {
   List<Dish> dishes = [];
 
   Future<void> _fetchTables() async {
-    final response = await dio.get("/tables");
+    final response = await dio.get("/tables/all");
     if (response.statusCode == 200) {
       setState(() {
         tables = (response.data as List).map((item) => TableB.fromJson(item)).toList();
@@ -30,22 +30,9 @@ class _HomePageState extends State<HomePage> {
       throw Exception('Failed to load tables');
     }
   }
-  Future<void> deleteDish(int iddish) async {
-    try {
-      final response = await dio.delete("/delete/${iddish}");
-      if (response.statusCode == 200) {
-        print('Dish deleted successfully');
-      } else {
-        throw Exception('Failed to delete dish');
-      }
-    } catch (error) {
-      print('Error: $error');
-      throw Exception('Failed to connect to API');
-    }
-  }
 
   Future<void> _fetchDishes() async {
-    final response = await dio.get("/dishs");
+    final response = await dio.get("/dishs/all");
     if (response.statusCode == 200) {
       setState(() {
         dishes = (response.data as List).map((item) => Dish.fromJson(item)).toList();
@@ -89,12 +76,13 @@ class _HomePageState extends State<HomePage> {
           ),
         ],
       ),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            Expanded(
-              child: GridView.builder(
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+        body: SingleChildScrollView(
+          child: Column(
+            children: [
+              GridView.builder(
+                shrinkWrap: true,
+                physics: NeverScrollableScrollPhysics(),
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 1, // Display tables in a single row
                   childAspectRatio: 3, // Adjust aspect ratio for horizontal layout
                 ),
@@ -125,55 +113,21 @@ class _HomePageState extends State<HomePage> {
                             tables[index].nametable,
                             style: TextStyle(fontWeight: FontWeight.bold),
                           ),
-                          // Text(
-                          //   statusToString(tables[index].status),
-                          //   style: TextStyle(fontWeight: FontWeight.bold),
-                          // ),
                         ],
                       ),
                     ),
                   );
                 },
               ),
-            ),
-            Expanded(
-              child: GridView.builder(
+              GridView.builder(
+                shrinkWrap: true,
+                physics: NeverScrollableScrollPhysics(),
                 gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 3, // Display dishes in 3 rows
                 ),
                 itemCount: dishes.length,
                 itemBuilder: (context, index) {
                   return GestureDetector(
-                    onTap: () {
-                      showDialog(
-                        context: context,
-                        builder: (BuildContext context) {
-                          return AlertDialog(
-                            title: Text('Bạn có thể sửa hoặc xóa món ăn này'),
-                            content: Text('Bạn muốn làm gì với món ăn này?'),
-                            actions: <Widget>[
-                              TextButton(
-                                child: Text('Sửa'),
-                                onPressed: () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => EditDishPage(dish: dishes[index]),
-                                    ),
-                                  );
-                                },
-                              ),
-                              TextButton(
-                                child: Text('Xóa'),
-                                onPressed: () {
-                                  deleteDish(dishes[index].iddish);
-                                },
-                              ),
-                            ],
-                          );
-                        },
-                      );
-                    },
                     child: Card(
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(15.0),
@@ -200,7 +154,6 @@ class _HomePageState extends State<HomePage> {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                // Text('${dishes[index].iddish}'),
                                 Text(
                                   dishes[index].namedish,
                                   style: TextStyle(fontWeight: FontWeight.bold),
@@ -218,10 +171,9 @@ class _HomePageState extends State<HomePage> {
                   );
                 },
               ),
-            ),
-          ],
-        ),
-      ),
+            ],
+          ),
+        )
     );
   }
 }

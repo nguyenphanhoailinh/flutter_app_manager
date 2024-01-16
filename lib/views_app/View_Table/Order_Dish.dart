@@ -273,12 +273,12 @@ class _OrderDishPageState extends State<OrderDishPage> {
                           children: [
                             CircleAvatar(
                               backgroundImage: NetworkImage(
-                                dish.imagefilename, // Hiển thị hình ảnh từ mạng
+                                dish.imagefilename,
                               ),
-                              radius: 30, // Điều chỉnh kích thước hình ảnh
+                              radius: 30,
                             ),
-                            const SizedBox(width: 10), // Tạo khoảng cách giữa hình ảnh và văn bản
-                            Expanded( // Sử dụng Expanded để văn bản không bị cắt
+                            const SizedBox(width: 10),
+                            Expanded(
                               child: Text(
                                 '${dish.namedish} - ${dish.price.toStringAsFixed(2)}\k',
                                 style: const TextStyle(fontWeight: FontWeight.bold),
@@ -298,13 +298,11 @@ class _OrderDishPageState extends State<OrderDishPage> {
             ElevatedButton(
               onPressed: () async {
                 if (selectedTable == null) {
-                  // Hiển thị thông báo lỗi nếu không có bàn nào được chọn
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(content: Text('Vui lòng chọn một bàn trước khi tạo đơn hàng.')),
                   );
                 } else {
                   try {
-                    // Tạo một đối tượng Order từ danh sách các món ăn đã chọn
                     Order order = Order(
                       dishes: selectedDishes,
                       // Danh sách các món ăn đã chọn
@@ -315,11 +313,7 @@ class _OrderDishPageState extends State<OrderDishPage> {
                           selectedDishes),
                         idorder:null// Tính tổng số tiền
                     );
-
-                    // Gửi đối tượng Order đến máy chủ
                     await createOrder(order);
-
-                    // Hiển thị thông báo thành công
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(
                           content: Text('Đơn hàng đã được tạo thành công!')),
