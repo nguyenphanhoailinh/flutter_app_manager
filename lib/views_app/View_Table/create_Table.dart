@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_app_manager/models/Status.dart';
 import 'package:flutter_app_manager/models/table.dart';
 import 'package:flutter_app_manager/models/tableA.dart';
+import 'package:flutter_app_manager/views_app/View_Table/Menu_Table.dart';
 
 import '../View_Menu/menu_dish.dart';
 
@@ -45,7 +46,11 @@ class _CreateTableFormState extends State<CreateTableForm> {
         leading: IconButton(
           icon: const Icon(Icons.chevron_left, color: Colors.white),
           onPressed: () =>
-              Navigator.of(context).pop(),
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (context) => Menu_Table(),
+                ),
+              ),
         ),
         actions: <Widget>[
           IconButton(

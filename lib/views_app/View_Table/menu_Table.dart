@@ -42,20 +42,21 @@ class _TableListState extends State<Menu_Table> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Bàn'),
+        title: const Text('Bàn'),
+        leading: Container(),
         actions: <Widget>[
           IconButton(
-            icon: Icon(Icons.fastfood),
+            icon: const Icon(Icons.fastfood),
             onPressed: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => Menu_Dish()),
+                MaterialPageRoute(builder: (context) => const Menu_Dish()),
               );
             },
           ),
 
           IconButton(
-            icon: Icon(Icons.view_agenda),
+            icon: const Icon(Icons.view_agenda),
             onPressed: () {
               Navigator.push(
                 context,
@@ -65,10 +66,10 @@ class _TableListState extends State<Menu_Table> {
           ),
         ],
       ),
-      backgroundColor: const Color.fromARGB(255, 50, 73, 113),
+      //backgroundColor: const Color.fromARGB(255, 50, 73, 113),
       body: GridView.builder(
 
-        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 2,
         ),
         itemCount: tables.length,
@@ -88,15 +89,16 @@ class _TableListState extends State<Menu_Table> {
             },
             child: Card(
               shape: RoundedRectangleBorder(
-                side: BorderSide(color: Color.fromARGB(255, 50, 73, 113), width: 2),
+                side: const BorderSide(color: Color.fromARGB(255, 50, 73, 113), width: 2),
                 borderRadius: BorderRadius.circular(30.0),
               ),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
                   Text(
+
                     tables[index].nametable,
-                    style: TextStyle(fontWeight: FontWeight.bold),
+                    style: const TextStyle(fontWeight: FontWeight.bold),
                   ),
                   // Text(
                   //   statusToString(tables[index].status),

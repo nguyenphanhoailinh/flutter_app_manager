@@ -140,7 +140,6 @@ class _OrderDishPageState extends State<OrderDishPage> {
     return Scaffold(
 
       appBar: AppBar(
-
         title: Text(widget.tableName),
       ),
       backgroundColor: const Color.fromARGB(255, 50, 73, 113),
@@ -150,7 +149,6 @@ class _OrderDishPageState extends State<OrderDishPage> {
             flex: 2,
             child: Material(
               child: Column(
-
                 children: <Widget>[
                   const ListTile(
                     leading: Icon(Icons.shopping_basket),

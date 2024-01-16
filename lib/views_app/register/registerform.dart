@@ -1,7 +1,7 @@
 import 'package:flutter_app_manager/models/user.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_app_manager/login/loginform.dart';
+import 'package:flutter_app_manager/views_app/login/loginform.dart';
 
 class RegisterForm extends StatefulWidget {
   @override
@@ -24,17 +24,6 @@ class _RegisterFormState extends State<RegisterForm> {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text('Vui lòng nhập tất cả các trường'),
-          backgroundColor: Colors.red,
-        ),
-      );
-      return;
-    }
-    RegExp regex = RegExp(
-        r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$');
-    if (!regex.hasMatch(username)) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Vui lòng nhập email hợp lệ'),
           backgroundColor: Colors.red,
         ),
       );
@@ -79,14 +68,14 @@ class _RegisterFormState extends State<RegisterForm> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color.fromARGB(255, 50, 73, 113),
+    //  backgroundColor: Color.fromARGB(255, 50, 73, 113),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: ListView(
           children: [
             const SizedBox(height: 50),
-            Center(
-              child: const Text(
+            const Center(
+              child: Text(
                 'Đăng ký',
                 style: TextStyle(
                   fontSize: 30,
@@ -97,46 +86,46 @@ class _RegisterFormState extends State<RegisterForm> {
             const SizedBox(height: 50),
             TextField(
               controller: _fullnameController,
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 labelText: 'Họ và tên',
                 border: OutlineInputBorder(),
-                prefixIcon: const Icon(Icons.person),
+                prefixIcon: Icon(Icons.person),
               ),
             ),
             const SizedBox(height: 10),
             TextField(
               controller: _usernameController,
-              decoration: InputDecoration(
-                labelText: 'Email đăng nhập',
+              decoration: const InputDecoration(
+                labelText: 'username',
                 border: OutlineInputBorder(),
-                prefixIcon: const Icon(Icons.email),
+                prefixIcon: Icon(Icons.email),
               ),
             ),
             const SizedBox(height: 10),
             TextField(
               controller: _passwordController,
-              decoration: InputDecoration(
-                labelText: 'Mật khẩu',
+              decoration: const InputDecoration(
+                labelText: 'password',
                 border: OutlineInputBorder(),
-                prefixIcon: const Icon(Icons.lock),
+                prefixIcon: Icon(Icons.lock),
               ),
               obscureText: true,
             ),
             const SizedBox(height: 20),
             ElevatedButton(
               onPressed: _register,
-              child: const Text('Đăng ký',
-              style: TextStyle(
-                color: Colors.black54,
-                fontWeight: FontWeight.bold,
-              ),
-              ),
               style: ElevatedButton.styleFrom(
                 // shape: RoundedRectangleBorder(
                 //   borderRadius: BorderRadius.circular(20),
                 minimumSize: const Size(double.infinity, 50),
                 padding: const EdgeInsets.symmetric(horizontal: 80, vertical: 10),
 
+              ),
+              child: const Text('Đăng ký',
+              style: TextStyle(
+                color: Colors.black54,
+                fontWeight: FontWeight.bold,
+              ),
               ),
 
             ),

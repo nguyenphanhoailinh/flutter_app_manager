@@ -7,8 +7,8 @@ import 'package:flutter_app_manager/views_app/View_Menu/menu_dish.dart';
 
 import '../../models/table.dart';
 import '../View_Menu/Edit_Dish.dart';
-import 'Order_Dish.dart';
-import 'create_Table.dart';
+import '../View_Table/Order_Dish.dart';
+import '../View_Table/create_Table.dart';
 
 class HomePage extends StatefulWidget {
   @override

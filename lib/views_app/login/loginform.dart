@@ -1,9 +1,10 @@
 import 'package:flutter_app_manager/models/signin.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_app_manager/register/registerform.dart';
+import 'package:flutter_app_manager/views_app/register/registerform.dart';
 import 'package:flutter_app_manager/views_app/View_Table/menu_Table.dart';
 import 'package:flutter_app_manager/views_app/View_Menu/menu_dish.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 
 class LoginForm extends StatefulWidget {
@@ -43,7 +44,7 @@ class _LoginFormState extends State<LoginForm> {
     } catch (e) {
       if (e is DioError) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
+          const SnackBar(
             content: Text('Vui lòng kiểm tra lại email hoặc mật khẩu của bạn'),
             backgroundColor: Colors.red,
           ),
@@ -55,7 +56,7 @@ class _LoginFormState extends State<LoginForm> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color.fromARGB(255, 50, 73, 113),
+     // backgroundColor: Color.fromARGB(255, 50, 73, 113),
 
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -77,7 +78,7 @@ class _LoginFormState extends State<LoginForm> {
                 TextField(
                   controller: _usernameController,
                   decoration: const InputDecoration(
-                    labelText: 'Nhập email',
+                    labelText: 'username',
                       labelStyle: TextStyle(
                           color: Colors.black87
                       ),
@@ -89,7 +90,7 @@ class _LoginFormState extends State<LoginForm> {
                 TextField(
                   controller: _passwordController,
                   decoration: const InputDecoration(
-                    labelText: 'Nhập mật khẩu',
+                    labelText: 'password',
                     labelStyle: TextStyle(
                       color: Colors.black87
                     ),
@@ -101,14 +102,14 @@ class _LoginFormState extends State<LoginForm> {
                 const SizedBox(height: 24),
                 ElevatedButton(
                   onPressed: _login,
+                  style: ElevatedButton.styleFrom(
+                    minimumSize: const Size(double.infinity, 50), // full width
+                  ),
                   child: const Text('Đăng nhập',
                     style: TextStyle(
                     color: Colors.black54,
                     fontWeight: FontWeight.bold,
                   ),
-                  ),
-                  style: ElevatedButton.styleFrom(
-                    minimumSize: const Size(double.infinity, 50), // full width
                   ),
 
                 ),
