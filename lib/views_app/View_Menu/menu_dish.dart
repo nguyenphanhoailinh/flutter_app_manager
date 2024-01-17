@@ -112,7 +112,8 @@ class _MenuDishState extends State<Menu_Dish> {
                       content: Text('Bạn muốn làm gì với món ăn này?'),
                       actions: <Widget>[
                         TextButton(
-                          child: Text('Sửa'),
+                          child: Text('Sửa',
+                            style: TextStyle(fontWeight: FontWeight.bold, color: Colors.blue),),
                           onPressed: () {
                             Navigator.push(
                               context,
@@ -123,7 +124,8 @@ class _MenuDishState extends State<Menu_Dish> {
                           },
                         ),
                         TextButton(
-                          child: Text('Xóa'),
+                          child: Text('Xóa',
+                              style: TextStyle(fontWeight: FontWeight.bold, color: Colors.red),),
                           onPressed: () {
                             deleteDish(dishes[index].iddish);
                           },

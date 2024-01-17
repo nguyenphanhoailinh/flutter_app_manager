@@ -61,7 +61,8 @@ class _CreateDishPageState extends State<CreateDishPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Create Dish'),
+        title: Text('Thêm món ăn'),
+        backgroundColor: Color.fromRGBO(109, 117, 208, 0.8),
       ),
       body: Padding(
         padding: EdgeInsets.all(8.0),
@@ -95,21 +96,25 @@ class _CreateDishPageState extends State<CreateDishPage> {
             TextFormField(
               controller: _dishNameController,
               decoration: const InputDecoration(
-                labelText: 'Dish Name',
+                labelText: 'Tên Món',
               ),
             ),
             const SizedBox(height: 20),
             TextFormField(
               controller: _priceController,
               decoration: const InputDecoration(
-                labelText: 'Price',
+                labelText: 'Giá tiền',
               ),
               keyboardType: TextInputType.number,
             ),
             SizedBox(height: 20),
             ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                  minimumSize: const Size(double.infinity, 50),
+                  backgroundColor: Color.fromRGBO(109, 117, 208, 0.8)
+              ),
               onPressed: _saveDish,
-              child: Text('Save'),
+              child: Text('Tạo'),
             ),
           ],
         ),

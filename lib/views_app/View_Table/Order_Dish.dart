@@ -244,10 +244,14 @@ class _OrderDishPageState extends State<OrderDishPage> {
                                   child: Text('Tổng Số Tiền: ${snapshot.data![index].totalAmount}\k', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
                                 ),
                                 ElevatedButton(
-                                  onPressed: () {
-
-                                  },
-                                  child: const Text('Thanh toán'),
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: Color.fromRGBO(109, 117, 208, 0.8),
+                                    minimumSize: const Size(30, 40),
+                                  ),
+                                  onPressed: ()   {},
+                                  child: Text('Thanh Toán',
+                                    style: TextStyle( fontSize:15,color: Colors.white),
+                                  ),
                                 ),
                               ],
                             );

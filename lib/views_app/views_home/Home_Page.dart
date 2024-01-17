@@ -4,6 +4,7 @@ import 'package:flutter_app_manager/models/Status.dart';
 import 'package:flutter_app_manager/models/dish.dart';
 import 'package:flutter_app_manager/views_app/View_Menu/CreateDishPage.dart';
 import 'package:flutter_app_manager/views_app/View_Menu/menu_dish.dart';
+import 'package:flutter_app_manager/views_app/View_Table/Menu_Table.dart';
 
 import '../../models/table.dart';
 import '../View_Menu/Edit_Dish.dart';
@@ -55,7 +56,21 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Trang chủ'),
+        title: Row(
+          children: [
+            IconButton(
+              icon: const Icon(Icons.home),
+              onPressed: () {
+                // Navigator.push(
+                //   context,
+                //   MaterialPageRoute(builder: (context) => HomePage()),
+                //);
+              },
+            ),
+            const SizedBox(width: 8), // Add some space between the home icon and the title
+            const Text('Trang chủ'),
+          ],
+        ),
         backgroundColor: Color.fromRGBO(109, 117, 208, 0.8),
         actions: <Widget>[
           IconButton(
@@ -72,12 +87,13 @@ class _HomePageState extends State<HomePage> {
             onPressed: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => CreateTableForm()),
+                MaterialPageRoute(builder: (context) => Menu_Table()),
               );
             },
           ),
         ],
       ),
+
       body: Column(
         children: [
           const Padding(

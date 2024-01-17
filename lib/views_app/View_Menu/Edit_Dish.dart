@@ -83,8 +83,10 @@ class _EditDishPageState extends State<EditDishPage> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Sửa món'),
+        backgroundColor: Color.fromRGBO(109, 117, 208, 0.8),
       ),
       body: Form(
+
         child: Column(
           children: <Widget>[
             if (_imageUrl != null)
@@ -93,7 +95,8 @@ class _EditDishPageState extends State<EditDishPage> {
               Image.network(widget.dish.imagefilename),
             TextFormField(
               controller: _dishNameController,
-              decoration: InputDecoration(labelText: 'Tên món'),
+              decoration: InputDecoration(labelText: 'Tên món',
+              ),
               validator: (value) {
                 if (value == null || value.isEmpty) {
                   return 'Vui lòng nhập tên món';
@@ -111,13 +114,38 @@ class _EditDishPageState extends State<EditDishPage> {
                 return null;
               },
             ),
+            SizedBox(height: 10),
             ElevatedButton(
+
+
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Color.fromRGBO(109, 117, 208, 0.8),
+                minimumSize: const Size(50, 50),
+
+
+              ),
               onPressed: _pickImage,
-              child: Text('Chọn hình ảnh mới'),
+
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(Icons.camera_alt),
+                  SizedBox(width: 8), // Add some space between the icon and text
+                  Text('Chọn hình ảnh mới'),
+                ],
+              ),
+
             ),
+            SizedBox(height: 10),
             ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Color.fromRGBO(109, 117, 208, 0.8),
+                minimumSize: const Size(double.infinity, 50),
+              ),
               onPressed: _updateDish,
-              child: Text('Cập nhật món ăn'),
+              child: Text('Cập nhật món ăn',
+                  style: TextStyle( fontSize:15,color: Colors.white),
+                  ),
             ),
           ],
         ),
