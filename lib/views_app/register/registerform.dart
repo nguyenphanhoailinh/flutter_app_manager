@@ -80,6 +80,7 @@ class _RegisterFormState extends State<RegisterForm> {
                 style: TextStyle(
                   fontSize: 30,
                   fontWeight: FontWeight.bold,
+                  color: Color.fromRGBO(109, 117, 208, 0.8)
                 ),
               ),
             ),
@@ -115,15 +116,14 @@ class _RegisterFormState extends State<RegisterForm> {
             ElevatedButton(
               onPressed: _register,
               style: ElevatedButton.styleFrom(
-                // shape: RoundedRectangleBorder(
-                //   borderRadius: BorderRadius.circular(20),
+                backgroundColor: Color.fromRGBO(109, 117, 208, 0.8),
                 minimumSize: const Size(double.infinity, 50),
                 padding: const EdgeInsets.symmetric(horizontal: 80, vertical: 10),
 
               ),
               child: const Text('Đăng ký',
               style: TextStyle(
-                color: Colors.black54,
+                color: Colors.white,
                 fontWeight: FontWeight.bold,
               ),
               ),
@@ -134,7 +134,7 @@ class _RegisterFormState extends State<RegisterForm> {
               child: const Text(
                 "Bạn đã có tài khoản? Đăng nhập",
                 style: TextStyle(
-                  color: Colors.blue,
+                  color: Color.fromRGBO(109, 117, 208, 0.8),
                   fontWeight: FontWeight.bold,
                 ),
               ),

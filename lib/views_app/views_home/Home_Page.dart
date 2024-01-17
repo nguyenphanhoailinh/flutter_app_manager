@@ -55,6 +55,7 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Trang chủ'),
+        backgroundColor: Color.fromRGBO(109, 117, 208, 0.8),
         actions: <Widget>[
           IconButton(
             icon: Icon(Icons.fastfood),
@@ -79,13 +80,27 @@ class _HomePageState extends State<HomePage> {
         body: SingleChildScrollView(
           child: Column(
             children: [
+              Padding(
+                padding: EdgeInsets.only(top: 20.0, bottom: 10.0),
+                child: Text(
+                  'Bàn ăn',
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 25.0,
+                    color: Color.fromRGBO(109, 117, 208, 0.8)
+                  ),
+                  textAlign: TextAlign.start,
+                ),
+              ),
               GridView.builder(
+
                 shrinkWrap: true,
                 physics: NeverScrollableScrollPhysics(),
                 gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 1, // Display tables in a single row
+                  crossAxisCount: 2,
                   childAspectRatio: 3, // Adjust aspect ratio for horizontal layout
                 ),
+
                 itemCount: tables.length,
                 itemBuilder: (context, index) {
                   return GestureDetector(
@@ -93,22 +108,28 @@ class _HomePageState extends State<HomePage> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
+
                           builder: (context) => OrderDishPage(
                             tableName: tables[index].nametable,
                             idtable: tables[index].idtable,
                             updateTableStatus: updateTableStatus,
+
                           ),
                         ),
                       );
                     },
                     child: Card(
                       shape: RoundedRectangleBorder(
-                        side: BorderSide(color: Color.fromARGB(255, 50, 73, 113), width: 2),
+
+                        side: BorderSide(color: Color.fromRGBO(109, 117, 208, 0.8), width: 2),
                         borderRadius: BorderRadius.circular(30.0),
+
                       ),
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
+
                         children: <Widget>[
+
                           Text(
                             tables[index].nametable,
                             style: TextStyle(fontWeight: FontWeight.bold),
@@ -119,22 +140,38 @@ class _HomePageState extends State<HomePage> {
                   );
                 },
               ),
+              Padding(
+                padding: EdgeInsets.only(top: 20.0, bottom: 10.0),
+                child: Text(
+                  'Món ăn',
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 25.0,
+                      color: Color.fromRGBO(109, 117, 208, 0.8)
+                  ),
+                  textAlign: TextAlign.start,
+                ),
+              ),
               GridView.builder(
+
                 shrinkWrap: true,
                 physics: NeverScrollableScrollPhysics(),
                 gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 3, // Display dishes in 3 rows
+                  crossAxisCount: 2, // Display dishes in 3 rows
                 ),
                 itemCount: dishes.length,
                 itemBuilder: (context, index) {
                   return GestureDetector(
                     child: Card(
+                       color: Colors.white,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(15.0),
+                        side: BorderSide(color: Color.fromRGBO(109, 117, 208, 0.8), width: 2.0),
                       ),
                       elevation: 5.0,
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.stretch,
+
                         children: [
                           Expanded(
                             flex: 3,
@@ -154,13 +191,22 @@ class _HomePageState extends State<HomePage> {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
+
                                 Text(
                                   dishes[index].namedish,
-                                  style: TextStyle(fontWeight: FontWeight.bold),
+                                  style: TextStyle(fontWeight: FontWeight.bold,
+                                    color: Color.fromRGBO(109, 117, 208, 0.8),
+                                    fontSize: 16
+                                  ),
+
+
                                 ),
                                 SizedBox(height: 10),
                                 Text(
                                   '${dishes[index].price.toStringAsFixed(2)}\k',
+                                  style: TextStyle(fontWeight: FontWeight.bold,
+
+                                      fontSize: 13)
                                 ),
                               ],
                             ),

@@ -43,6 +43,7 @@ class _CreateTableFormState extends State<CreateTableForm> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Tạo bàn'),
+          backgroundColor: Color.fromRGBO(109, 117, 208, 0.8),
         leading: IconButton(
           icon: const Icon(Icons.chevron_left, color: Colors.white),
           onPressed: () =>
@@ -70,11 +71,20 @@ class _CreateTableFormState extends State<CreateTableForm> {
         children: [
           TextField(
             controller: _nameController,
-            decoration: const InputDecoration(labelText: 'Tên bảng'),
+            decoration: const InputDecoration(labelText: 'Tên bàn'),
           ),
           ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              primary: Color.fromRGBO(109, 117, 208, 0.8),
+              onPrimary: Color.fromRGBO(109, 117, 208, 0.8)
+            ),
             onPressed: _createTable,
-            child: const Text('Tạo bảng'),
+
+            child: const Text('Tạo bàn',
+            style: TextStyle(
+              color: Colors.white
+            ),),
+
           ),
         ],
       ),

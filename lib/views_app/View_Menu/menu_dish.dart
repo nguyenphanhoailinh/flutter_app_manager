@@ -65,14 +65,14 @@ class _MenuDishState extends State<Menu_Dish> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color.fromARGB(255, 50, 73, 113),
+
       appBar: AppBar(
         title: Text('Danh sách món ăn '),
         leading: IconButton(
           icon: Icon(Icons.chevron_left, color: Colors.white),
           onPressed: () => Navigator.of(context).pop(),
         ),
-        backgroundColor: Colors.blueAccent,
+        backgroundColor: Color.fromRGBO(109, 117, 208, 0.8),
         actions: <Widget>[
 
           PopupMenuButton<String>(
@@ -136,6 +136,7 @@ class _MenuDishState extends State<Menu_Dish> {
               child: Card(
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(15.0),
+                    side: BorderSide(color: Color.fromRGBO(109, 117, 208, 0.8), width: 2.0)
                 ),
                 elevation: 5.0,
                 child: Column(
@@ -162,11 +163,17 @@ class _MenuDishState extends State<Menu_Dish> {
                           // Text('${dishes[index].iddish}'),
                           Text(
                             dishes[index].namedish,
-                            style: TextStyle(fontWeight: FontWeight.bold),
+                        style: TextStyle(fontWeight: FontWeight.bold,
+                          color: Color.fromRGBO(109, 117, 208, 0.8),
+                          fontSize: 16),
                           ),
                           SizedBox(height: 10),
                           Text(
                             '${dishes[index].price.toStringAsFixed(2)}\k  ',
+
+                              style: TextStyle(fontWeight: FontWeight.bold,
+
+                        fontSize: 13)
                           ),
                         ],
                       ),

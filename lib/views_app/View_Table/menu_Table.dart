@@ -4,6 +4,7 @@ import 'package:flutter_app_manager/models/Status.dart';
 import 'package:flutter_app_manager/models/table.dart';
 import 'package:flutter_app_manager/views_app/View_Menu/menu_dish.dart';
 
+import '../views_home/Home_Page.dart';
 import 'Order_Dish.dart';
 import 'create_Table.dart';
 
@@ -43,8 +44,18 @@ class _TableListState extends State<Menu_Table> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Bàn'),
+        backgroundColor: Color.fromRGBO(109, 117, 208, 0.8),
         leading: Container(),
         actions: <Widget>[
+          IconButton(
+            icon: const Icon(Icons.home),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => HomePage()),
+              );
+            },
+          ),
           IconButton(
             icon: const Icon(Icons.fastfood),
             onPressed: () {

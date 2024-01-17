@@ -141,8 +141,9 @@ class _OrderDishPageState extends State<OrderDishPage> {
 
       appBar: AppBar(
         title: Text(widget.tableName),
+        backgroundColor:   Color.fromRGBO(109, 117, 208, 0.8),
       ),
-      backgroundColor: const Color.fromARGB(255, 50, 73, 113),
+
       body: Row(
         children: <Widget>[
           Expanded(
@@ -162,7 +163,9 @@ class _OrderDishPageState extends State<OrderDishPage> {
                   ),
                   ElevatedButton(
                     onPressed: () {
+
                       showModalBottomSheet(
+                          backgroundColor: const Color.fromRGBO(109, 117, 208, 0.8),
                         context: context,
                         builder: (BuildContext context) {
                           return ListView.builder(
@@ -188,6 +191,7 @@ class _OrderDishPageState extends State<OrderDishPage> {
                                     ),
                                   ),
                                   onTap: () {
+
                                     addDish(allDishes[index]);
                                     Navigator.pop(context);
                                   },
@@ -198,7 +202,11 @@ class _OrderDishPageState extends State<OrderDishPage> {
                         },
                       );
                     },
+                    style: ButtonStyle(
+                      backgroundColor: MaterialStateProperty.all<Color>(Color.fromRGBO(109, 117, 208, 0.8)), // Chọn màu xanh tùy ý
+                    ),
                     child: const Padding(
+
                       padding: EdgeInsets.only(right: 0),
 
                       child: Text(' Gọi Món'),
@@ -326,6 +334,9 @@ class _OrderDishPageState extends State<OrderDishPage> {
                   }
                 }
               },
+              style: ButtonStyle(
+                backgroundColor: MaterialStateProperty.all<Color>(Color.fromRGBO(109, 117, 208, 0.8)), // Chọn màu xanh tùy ý
+              ),
               child: const Text('XÁC NHẬN ĐƠN HÀNG'),
             ),
 

@@ -70,7 +70,7 @@ class _LoginFormState extends State<LoginForm> {
                   style: TextStyle(
                     fontSize: 32,
                     fontWeight: FontWeight.bold,
-                    color: Colors.black87,
+                    color: Color.fromRGBO(109, 117, 208, 0.8),
 
                   ),
                 ),
@@ -78,9 +78,9 @@ class _LoginFormState extends State<LoginForm> {
                 TextField(
                   controller: _usernameController,
                   decoration: const InputDecoration(
-                    labelText: 'username',
+                    labelText: 'Username',
                       labelStyle: TextStyle(
-                          color: Colors.black87
+                          color: Color.fromRGBO(109, 117, 208, 0.8)
                       ),
                     border: OutlineInputBorder(),
                     prefixIcon: Icon(Icons.email)
@@ -90,9 +90,9 @@ class _LoginFormState extends State<LoginForm> {
                 TextField(
                   controller: _passwordController,
                   decoration: const InputDecoration(
-                    labelText: 'password',
+                    labelText: 'Password',
                     labelStyle: TextStyle(
-                      color: Colors.black87
+                      color: Color.fromRGBO(109, 117, 208, 0.8)
                     ),
                     border: OutlineInputBorder(),
                     prefixIcon: Icon(Icons.lock),
@@ -103,11 +103,12 @@ class _LoginFormState extends State<LoginForm> {
                 ElevatedButton(
                   onPressed: _login,
                   style: ElevatedButton.styleFrom(
-                    minimumSize: const Size(double.infinity, 50), // full width
+                    minimumSize: const Size(double.infinity, 50),
+                      backgroundColor: Color.fromRGBO(109, 117, 208, 0.8)// full width
                   ),
                   child: const Text('Đăng nhập',
                     style: TextStyle(
-                    color: Colors.black54,
+                    color: Colors.white,
                     fontWeight: FontWeight.bold,
                   ),
                   ),
@@ -118,7 +119,7 @@ class _LoginFormState extends State<LoginForm> {
                   child: const Text(
                     "Bạn chưa có tài khoản? Đăng Ký",
                     style: TextStyle(
-                      color: Colors.blue,
+                      color:  Color.fromRGBO(109, 117, 208, 0.8),
                       fontWeight: FontWeight.bold,
                     ),
                   ),

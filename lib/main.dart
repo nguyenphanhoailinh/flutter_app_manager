@@ -20,7 +20,7 @@ class MyApp extends StatelessWidget {const MyApp({super.key});
         '/menuTable': (context) => Menu_Table(),
       },
       home: Scaffold(
-        body: HomePage(),
+        body: Menu_Table(),
       ),
     );
   }
