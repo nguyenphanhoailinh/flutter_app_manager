@@ -1,5 +1,5 @@
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter_app_manager/models/Status.dart';
 import 'package:flutter_app_manager/models/dish.dart';
 import 'package:flutter_app_manager/views_app/View_Menu/CreateDishPage.dart';
@@ -9,7 +9,6 @@ import '../../models/table.dart';
 import '../View_Menu/Edit_Dish.dart';
 import '../View_Table/Order_Dish.dart';
 import '../View_Table/create_Table.dart';
-
 class HomePage extends StatefulWidget {
   @override
   _HomePageState createState() => _HomePageState();
@@ -19,6 +18,7 @@ class _HomePageState extends State<HomePage> {
   Dio dio = Dio(BaseOptions(baseUrl: "http://localhost:8888/api/v1"));
   List<TableB> tables = [];
   List<Dish> dishes = [];
+  final ScrollController _scrollController = ScrollController();
 
   Future<void> _fetchTables() async {
     final response = await dio.get("/tables/all");
@@ -41,8 +41,9 @@ class _HomePageState extends State<HomePage> {
       throw Exception('Failed to load dishes');
     }
   }
-  static void updateTableStatus(String tableName, String newStatus) {
-  }
+
+  static void updateTableStatus(String tableName, String newStatus) {}
+
   @override
   void initState() {
     super.initState();
@@ -77,149 +78,169 @@ class _HomePageState extends State<HomePage> {
           ),
         ],
       ),
-        body: SingleChildScrollView(
-          child: Column(
-            children: [
-              Padding(
-                padding: EdgeInsets.only(top: 20.0, bottom: 10.0),
-                child: Text(
-                  'Bàn ăn',
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 25.0,
-                    color: Color.fromRGBO(109, 117, 208, 0.8)
-                  ),
-                  textAlign: TextAlign.start,
-                ),
+      body: Column(
+        children: [
+          const Padding(
+            padding: EdgeInsets.fromLTRB(20.0, 20.0, 0.0, 20.0), // Add padding at the left, top and bottom
+            child: Text(
+              'Bàn',
+              style: TextStyle(
+                fontSize: 26,
+                fontWeight: FontWeight.bold,
+                color: Color.fromRGBO(109, 117, 208, 0.8),
               ),
-              GridView.builder(
+            ),
+          ),
 
-                shrinkWrap: true,
-                physics: NeverScrollableScrollPhysics(),
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
-                  childAspectRatio: 3, // Adjust aspect ratio for horizontal layout
-                ),
+          _buildTableList(),
+          SizedBox(height: 20),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Text(
+              'Món Ăn',
+              style: TextStyle(
+                fontSize: 26,
+                fontWeight: FontWeight.bold,
+                color: Color.fromRGBO(109, 117, 208, 0.8),
+              ),
+            ),
+          ),
 
-                itemCount: tables.length,
-                itemBuilder: (context, index) {
-                  return GestureDetector(
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
+          _buildDishGrid(),
+        ],
+      ),
+    );
+  }
 
-                          builder: (context) => OrderDishPage(
-                            tableName: tables[index].nametable,
-                            idtable: tables[index].idtable,
-                            updateTableStatus: updateTableStatus,
+  Widget _buildTableList() {
+    return Container(
+      height: 150,
 
+      child: Scrollbar(
+        thumbVisibility: true,
+        controller: _scrollController,
+        child: ListView.builder(
+          scrollDirection: Axis.horizontal,
+          controller: _scrollController,
+          itemCount: tables.length,
+          itemBuilder: (context, index) {
+            return GestureDetector(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => OrderDishPage(
+                      tableName: tables[index].nametable,
+                      idtable: tables[index].idtable,
+                      updateTableStatus: updateTableStatus,
+                    ),
+                  ),
+                );
+              },
+              child: Container(
+                width: 250, // Set the width of the Card
+                child: Card(
+
+                  color: Colors.white,
+                  shape: RoundedRectangleBorder(
+                    side: BorderSide(
+                      color: Color.fromRGBO(109, 117, 208, 0.8),
+                      width: 2,
+                    ),
+                    borderRadius: BorderRadius.circular(30.0), // Increase the border radius
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        Text(
+                          tables[index].nametable,
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: Color.fromRGBO(109, 117, 208, 0.8),
                           ),
                         ),
-                      );
-                    },
-                    child: Card(
-                      shape: RoundedRectangleBorder(
-
-                        side: BorderSide(color: Color.fromRGBO(109, 117, 208, 0.8), width: 2),
-                        borderRadius: BorderRadius.circular(30.0),
-
-                      ),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-
-                        children: <Widget>[
-
-                          Text(
-                            tables[index].nametable,
-                            style: TextStyle(fontWeight: FontWeight.bold),
-                          ),
-                        ],
-                      ),
+                      ],
                     ),
-                  );
-                },
-              ),
-              Padding(
-                padding: EdgeInsets.only(top: 20.0, bottom: 10.0),
-                child: Text(
-                  'Món ăn',
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 25.0,
-                      color: Color.fromRGBO(109, 117, 208, 0.8)
                   ),
-                  textAlign: TextAlign.start,
                 ),
               ),
-              GridView.builder(
+            );
+          },
+        ),
+      ),
+    );
+  }
 
-                shrinkWrap: true,
-                physics: NeverScrollableScrollPhysics(),
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2, // Display dishes in 3 rows
+
+
+  Widget _buildDishGrid() {
+    return Expanded(
+      child: GridView.builder(
+        shrinkWrap: true,
+        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 2,
+        ),
+        itemCount: dishes.length,
+        itemBuilder: (context, index) {
+          return GestureDetector(
+            child: Card(
+              color: Colors.white,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(15.0),
+                side: BorderSide(
+                  color: Color.fromRGBO(109, 117, 208, 0.8),
+                  width: 2.0,
                 ),
-                itemCount: dishes.length,
-                itemBuilder: (context, index) {
-                  return GestureDetector(
-                    child: Card(
-                       color: Colors.white,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(15.0),
-                        side: BorderSide(color: Color.fromRGBO(109, 117, 208, 0.8), width: 2.0),
+              ),
+              elevation: 5.0,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Expanded(
+                    flex: 3,
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(15.0),
+                        topRight: Radius.circular(15.0),
                       ),
-                      elevation: 5.0,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-
-                        children: [
-                          Expanded(
-                            flex: 3,
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.only(
-                                topLeft: Radius.circular(15.0),
-                                topRight: Radius.circular(15.0),
-                              ),
-                              child: Image.network(
-                                '${dishes[index].imagefilename}',
-                                fit: BoxFit.cover,
-                              ),
-                            ),
-                          ),
-                          Padding(
-                            padding: EdgeInsets.all(8.0),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-
-                                Text(
-                                  dishes[index].namedish,
-                                  style: TextStyle(fontWeight: FontWeight.bold,
-                                    color: Color.fromRGBO(109, 117, 208, 0.8),
-                                    fontSize: 16
-                                  ),
-
-
-                                ),
-                                SizedBox(height: 10),
-                                Text(
-                                  '${dishes[index].price.toStringAsFixed(2)}\k',
-                                  style: TextStyle(fontWeight: FontWeight.bold,
-
-                                      fontSize: 13)
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
+                      child: Image.network(
+                        '${dishes[index].imagefilename}',
+                        fit: BoxFit.cover,
                       ),
                     ),
-                  );
-                },
+                  ),
+                  Padding(
+                    padding: EdgeInsets.all(8.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          dishes[index].namedish,
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: Color.fromRGBO(109, 117, 208, 0.8),
+                            fontSize: 16,
+                          ),
+                        ),
+                        SizedBox(height: 10),
+                        Text(
+                          '${dishes[index].price.toStringAsFixed(2)}\k',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 13,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
               ),
-            ],
-          ),
-        )
+            ),
+          );
+        },
+      ),
     );
   }
 }
