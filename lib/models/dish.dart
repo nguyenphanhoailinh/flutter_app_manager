@@ -29,4 +29,5 @@ class Dish {
       'price': price,
     };
   }
+
 }

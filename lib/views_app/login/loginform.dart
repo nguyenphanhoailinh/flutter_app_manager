@@ -37,9 +37,7 @@ class _LoginFormState extends State<LoginForm> {
       final response = await dio.post("/signin",
           data: User(username: username, password: password).toJson());
       if (response.statusCode == 200) {
-        Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => Menu_Table()));
+        Navigator.pushNamed(context, '/home');
       }
     } catch (e) {
       if (e is DioError) {

@@ -8,6 +8,7 @@ import 'package:flutter_app_manager/models/order.dart';
 import 'package:flutter_app_manager/models/orderdish.dart';
 import 'package:flutter_app_manager/models/table.dart';
 import '../../models/dish.dart';
+import '../PaymentOrder/payment.dart';
 import 'Menu_Table.dart';
 
 class OrderDishPage extends StatefulWidget {
@@ -30,6 +31,7 @@ class _OrderDishPageState extends State<OrderDishPage> {
   List<Dish> orderedDishes =[];
   List<TableB> tables = [];
   double totalAmount = 0.0;
+  List<Order> order = [];
   // Order order;
   List<Dish> allDishes = [];
   Dio dio = Dio(BaseOptions(baseUrl: "http://localhost:8888/api/v1/dishs"));
@@ -92,14 +94,14 @@ class _OrderDishPageState extends State<OrderDishPage> {
       throw Exception('Failed to connect to API');
     }
   }
-  Future<List<Order>> getOrdersByTableId(int idtable) async {
+  Future<Order> getOrdersByTableId(int idtable) async {
     try {
       final response = await dio1.get("/$idtable");
       if (response.statusCode == 200) {
-        List<dynamic> jsonResponse = response.data;
-        if (jsonResponse is List) {
-          return jsonResponse.map((item) => Order.fromJson(item)).toList();
-        } else {
+        Map<String,dynamic> jsonResponse = response.data;
+        try {
+          return Order.fromJson(jsonResponse);
+        } catch(e) {
           throw Exception('Invalid data format');
         }
       } else {
@@ -110,7 +112,6 @@ class _OrderDishPageState extends State<OrderDishPage> {
       throw Exception('Failed to connect to API');
     }
   }
-
 
 
   void handleSaveOrder(Order order) {
@@ -141,8 +142,13 @@ class _OrderDishPageState extends State<OrderDishPage> {
     return Scaffold(
 
       appBar: AppBar(
+        leading: IconButton(
+          icon: const Icon(Icons.chevron_left, color: Colors.white),
+          onPressed: () =>
+              Navigator.pushNamed(context, '/home'),
+        ),
         title: Text(widget.tableName),
-        backgroundColor:   Color.fromRGBO(109, 117, 208, 0.8),
+        backgroundColor:Color.fromRGBO(109, 117, 208, 0.8),
       ),
 
       body: Row(
@@ -192,7 +198,6 @@ class _OrderDishPageState extends State<OrderDishPage> {
                                     ),
                                   ),
                                   onTap: () {
-
                                     addDish(allDishes[index]);
                                     Navigator.pop(context);
                                   },
@@ -216,50 +221,55 @@ class _OrderDishPageState extends State<OrderDishPage> {
 
                 Expanded(
                     flex: 1,
-                  child:FutureBuilder<List<Order>>(
+                  child:FutureBuilder<Order>(
                     future: getOrdersByTableId(widget.idtable),
                     builder: (context, snapshot) {
                       if (snapshot.hasData) {
-                        return ListView.builder(
-                          itemCount: snapshot.data!.length,
-                          itemBuilder: (context, index) {
-                            return ExpansionTile(
-                              title: const Padding(
-                                padding: EdgeInsets.only(bottom: 8.0,top: 30.0),
-                                child: Text('Các món đã gọi'),
+                        return ExpansionTile(
+                          title: const Padding(
+                            padding: EdgeInsets.only(bottom: 8.0,top: 30.0),
+                            child: Text('Các món đã gọi'),
+                          ),
+                          subtitle: Text('Ngày Đặt: ${snapshot.data!.ngaygiodat}'),
+                          children: <Widget>[
+                            ...snapshot.data!.dishes.map((dish) {
+                              return ListTile(
+                                leading: CircleAvatar(
+                                  backgroundImage: NetworkImage('${dish.imagefilename}'),
+                                  radius: 30.0, //
+                                ),
+                                title: Text('${dish.namedish}'),
+                                subtitle: Text('${dish.price}\k'),
+                              );
+                            }).toList(),
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Text('Tổng Số Tiền: ${snapshot.data!.totalAmount}\k', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+                            ),
+                            ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: Color.fromRGBO(109, 117, 208, 0.8),
+                                minimumSize: const Size(30, 40),
                               ),
-                              subtitle: Text('Ngày Đặt: ${snapshot.data![index].ngaygiodat}'),
-                              children: <Widget>[
-                                ...snapshot.data![index].dishes.map((dish) {
-                                  return ListTile(
-                                    leading: CircleAvatar(
-                                      backgroundImage: NetworkImage('${dish.imagefilename}'),
-                                      radius: 30.0, //
-                                    ),
-                                    title: Text('${dish.namedish}'),
-                                    subtitle: Text('${dish.price}\k'),
-                                  );
-                                }).toList(),
-                                Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Text('Tổng Số Tiền: ${snapshot.data![index].totalAmount}\k', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
-                                ),
-                                ElevatedButton(
-                                  style: ElevatedButton.styleFrom(
-                                    backgroundColor: Color.fromRGBO(109, 117, 208, 0.8),
-                                    minimumSize: const Size(30, 40),
-                                  ),
-                                  onPressed: ()   {},
-                                  child: Text('Thanh Toán',
-                                    style: TextStyle( fontSize:15,color: Colors.white),
-                                  ),
-                                ),
-                              ],
-                            );
-                          },
+                              onPressed: () async {
+                                // print(index);
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(builder: (context) => PayMentPage(
+                                    idtable: widget.idtable,
+                                  )),
+                                );
+                              },
+                              child: const Text(
+                                'Thanh Toán',
+                                style: TextStyle(fontSize: 15, color: Colors.white),
+                              ),
+                            ),
+                          ],
                         );
                       } else if (snapshot.hasError) {
-                        return Text("${snapshot.error}");
+
+                        // return Text("${snapshot.error}");
                       }
                       return CircularProgressIndicator();
                     },
@@ -325,7 +335,7 @@ class _OrderDishPageState extends State<OrderDishPage> {
                       status: Status.dangSuDung,
                       totalAmount: calculateTotalAmount(
                           selectedDishes),
-                        idorder:null// Tính tổng số tiền
+                        idorder:null,// Tính tổng số tiền
                     );
                     await createOrder(order);
                     ScaffoldMessenger.of(context).showSnackBar(
@@ -333,12 +343,16 @@ class _OrderDishPageState extends State<OrderDishPage> {
                           content: Text('Đơn hàng đã được tạo thành công!')),
 
                     );
+
                   } catch (e) {
                     // // Hiển thị thông báo lỗi
                     // ScaffoldMessenger.of(context).showSnackBar(
                     //   SnackBar(content: Text('Không thể tạo đơn hàng: $e')),
                     // );
                   }
+                  setState(() {
+
+                  });
                 }
               },
               style: ButtonStyle(

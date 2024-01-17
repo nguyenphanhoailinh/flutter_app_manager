@@ -62,6 +62,10 @@ class _CreateDishPageState extends State<CreateDishPage> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Thêm món ăn'),
+        leading: IconButton(
+          icon: Icon(Icons.chevron_left, color: Colors.white),
+          onPressed: () => Navigator.pushNamed(context, '/menudish'),
+        ),
         backgroundColor: Color.fromRGBO(109, 117, 208, 0.8),
       ),
       body: Padding(

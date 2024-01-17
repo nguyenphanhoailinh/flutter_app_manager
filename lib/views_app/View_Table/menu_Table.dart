@@ -43,10 +43,16 @@ class _TableListState extends State<Menu_Table> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Row(
+        automaticallyImplyLeading: false,
+        leading: IconButton(
+          icon: const Icon(Icons.chevron_left, color: Colors.white),
+          onPressed: () =>
+              Navigator.pushNamed(context, '/home'),
+        ),
+        title: const Row(
           children: [
             // Add some space between the home icon and the title
-            const Text('Bàn'),
+            Text('Bàn'),
           ],
         ),
         backgroundColor: Color.fromRGBO(109, 117, 208, 0.8),
@@ -111,10 +117,10 @@ class _TableListState extends State<Menu_Table> {
                     style: const TextStyle(fontWeight: FontWeight.bold, color:  Color.fromRGBO(109, 117, 208, 0.8)),
 
                   ),
-                  // Text(
-                  //   statusToString(tables[index].status),
-                  //   style: TextStyle(fontWeight: FontWeight.bold),
-                  // ),
+                  Text(
+                    statusToString(tables[index].status),
+                    style: const TextStyle(fontWeight: FontWeight.bold, color:  Color.fromRGBO(109, 117, 208, 0.8)),
+                  ),
                 ],
               ),
             ),

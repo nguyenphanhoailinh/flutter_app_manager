@@ -47,11 +47,7 @@ class _CreateTableFormState extends State<CreateTableForm> {
         leading: IconButton(
           icon: const Icon(Icons.chevron_left, color: Colors.white),
           onPressed: () =>
-              Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (context) => Menu_Table(),
-                ),
-              ),
+              Navigator.pushNamed(context, '/menuTable'),
         ),
         actions: <Widget>[
           IconButton(

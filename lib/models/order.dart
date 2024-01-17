@@ -51,7 +51,7 @@ import 'package:flutter_app_manager/models/table.dart';
 import 'dish.dart';
 
 class Order {
-   int? idorder;
+  final int? idorder;
   final List<Dish> dishes;
   final DateTime ngaygiodat;
   final TableB table;
@@ -59,7 +59,7 @@ class Order {
   final double totalAmount;
 
   Order({
-    required this.idorder,
+     required this.idorder,
     required this.dishes,
     required this.ngaygiodat,
     required this.table,

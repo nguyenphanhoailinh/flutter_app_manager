@@ -42,7 +42,9 @@ class _HomePageState extends State<HomePage> {
       throw Exception('Failed to load dishes');
     }
   }
-
+  String statusToString(Status status) {
+    return status.toString().split('.').last;
+  }
   static void updateTableStatus(String tableName, String newStatus) {}
 
   @override
@@ -56,15 +58,13 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         title: Row(
           children: [
             IconButton(
               icon: const Icon(Icons.home),
               onPressed: () {
-                // Navigator.push(
-                //   context,
-                //   MaterialPageRoute(builder: (context) => HomePage()),
-                //);
+                // Navigator.pushNamed(context, '/home');
               },
             ),
             const SizedBox(width: 8), // Add some space between the home icon and the title
@@ -73,22 +73,30 @@ class _HomePageState extends State<HomePage> {
         ),
         backgroundColor: Color.fromRGBO(109, 117, 208, 0.8),
         actions: <Widget>[
-          IconButton(
-            icon: Icon(Icons.fastfood),
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => Menu_Dish()),
-              );
-            },
-          ),
-          IconButton(
-            icon: Icon(Icons.view_agenda),
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => Menu_Table()),
-              );
+          PopupMenuButton<int>(
+            itemBuilder: (context) => [
+              const PopupMenuItem(
+                value: 1,
+                child: Text("Món ăn"),
+              ),
+              const PopupMenuItem(
+                value: 2,
+                child: Text("Bàn"),
+              ),
+              const PopupMenuItem(
+                value: 3,
+                child: Text("Danh sách Bàn đã thanh toán"),
+              ),
+            ],
+            onSelected: (value) {
+              if (value == 1) {
+                Navigator.pushNamed(context, '/menudish');
+              } else if (value == 2) {
+                Navigator.pushNamed(context, '/menuTable');
+              }
+              else if(value == 3){
+                Navigator.pushNamed(context, '/bill');
+              }
             },
           ),
         ],
@@ -109,9 +117,9 @@ class _HomePageState extends State<HomePage> {
           ),
 
           _buildTableList(),
-          SizedBox(height: 20),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
+          const SizedBox(height: 20),
+          const Padding(
+            padding: EdgeInsets.all(8.0),
             child: Text(
               'Món Ăn',
               style: TextStyle(
@@ -142,6 +150,7 @@ class _HomePageState extends State<HomePage> {
           itemBuilder: (context, index) {
             return GestureDetector(
               onTap: () {
+                print(index);
                 Navigator.push(
                   context,
                   MaterialPageRoute(
@@ -159,7 +168,7 @@ class _HomePageState extends State<HomePage> {
 
                   color: Colors.white,
                   shape: RoundedRectangleBorder(
-                    side: BorderSide(
+                    side: const BorderSide(
                       color: Color.fromRGBO(109, 117, 208, 0.8),
                       width: 2,
                     ),
@@ -172,10 +181,14 @@ class _HomePageState extends State<HomePage> {
                       children: <Widget>[
                         Text(
                           tables[index].nametable,
-                          style: TextStyle(
+                          style: const TextStyle(
                             fontWeight: FontWeight.bold,
                             color: Color.fromRGBO(109, 117, 208, 0.8),
                           ),
+                        ),
+                        Text(
+                          statusToString(tables[index].status),
+                          style: const TextStyle(fontWeight: FontWeight.bold, color:  Color.fromRGBO(109, 117, 208, 0.8)),
                         ),
                       ],
                     ),
@@ -195,7 +208,7 @@ class _HomePageState extends State<HomePage> {
     return Expanded(
       child: GridView.builder(
         shrinkWrap: true,
-        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 2,
         ),
         itemCount: dishes.length,
@@ -205,7 +218,7 @@ class _HomePageState extends State<HomePage> {
               color: Colors.white,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(15.0),
-                side: BorderSide(
+                side: const BorderSide(
                   color: Color.fromRGBO(109, 117, 208, 0.8),
                   width: 2.0,
                 ),
@@ -217,7 +230,7 @@ class _HomePageState extends State<HomePage> {
                   Expanded(
                     flex: 3,
                     child: ClipRRect(
-                      borderRadius: BorderRadius.only(
+                      borderRadius: const BorderRadius.only(
                         topLeft: Radius.circular(15.0),
                         topRight: Radius.circular(15.0),
                       ),
@@ -234,16 +247,16 @@ class _HomePageState extends State<HomePage> {
                       children: [
                         Text(
                           dishes[index].namedish,
-                          style: TextStyle(
+                          style: const TextStyle(
                             fontWeight: FontWeight.bold,
                             color: Color.fromRGBO(109, 117, 208, 0.8),
                             fontSize: 16,
                           ),
                         ),
-                        SizedBox(height: 10),
+                        const SizedBox(height: 10),
                         Text(
                           '${dishes[index].price.toStringAsFixed(2)}\k',
-                          style: TextStyle(
+                          style: const TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: 13,
                           ),

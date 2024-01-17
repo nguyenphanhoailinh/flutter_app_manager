@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_app_manager/models/dish.dart';
+import 'package:flutter_app_manager/views_app/View_Menu/menu_dish.dart';
 import 'package:image_picker/image_picker.dart';
 
 class EditDishPage extends StatefulWidget {
@@ -55,6 +56,9 @@ class _EditDishPageState extends State<EditDishPage> {
       final response = await dio.put("/update/${widget.dish.iddish}", data: formData);
 
       if (response.statusCode == 200) {
+        // Navigator.pushReplacement(
+        //     context,
+        //     MaterialPageRoute(builder: (context) => Menu_Dish()));
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
             content: Text("Món ăn đã được cập nhật thành công"),
@@ -82,6 +86,14 @@ class _EditDishPageState extends State<EditDishPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        leading: IconButton(
+          icon: Icon(Icons.chevron_left, color: Colors.white),
+          onPressed: () {
+            setState(() {});
+            Navigator.pushNamed(context, '/menudish');
+
+          },
+        ),
         title: Text('Sửa món'),
         backgroundColor: Color.fromRGBO(109, 117, 208, 0.8),
       ),
@@ -126,7 +138,7 @@ class _EditDishPageState extends State<EditDishPage> {
               ),
               onPressed: _pickImage,
 
-              child: Row(
+              child: const Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Icon(Icons.camera_alt),
@@ -136,14 +148,19 @@ class _EditDishPageState extends State<EditDishPage> {
               ),
 
             ),
-            SizedBox(height: 10),
+            const SizedBox(height: 10),
             ElevatedButton(
               style: ElevatedButton.styleFrom(
                 backgroundColor: Color.fromRGBO(109, 117, 208, 0.8),
                 minimumSize: const Size(double.infinity, 50),
               ),
-              onPressed: _updateDish,
-              child: Text('Cập nhật món ăn',
+
+              onPressed: () {
+                _updateDish();
+                setState(() {});
+              },
+
+              child: const Text('Cập nhật món ăn',
                   style: TextStyle( fontSize:15,color: Colors.white),
                   ),
             ),

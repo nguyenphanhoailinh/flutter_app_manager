@@ -68,9 +68,10 @@ class _MenuDishState extends State<Menu_Dish> {
 
       appBar: AppBar(
         title: Text('Danh sách món ăn '),
+        automaticallyImplyLeading: false,
         leading: IconButton(
           icon: Icon(Icons.chevron_left, color: Colors.white),
-          onPressed: () => Navigator.of(context).pop(),
+          onPressed: () => Navigator.pushReplacementNamed(context, '/home'),
         ),
         backgroundColor: Color.fromRGBO(109, 117, 208, 0.8),
         actions: <Widget>[
@@ -121,6 +122,7 @@ class _MenuDishState extends State<Menu_Dish> {
                                 builder: (context) => EditDishPage(dish: dishes[index]),
                               ),
                             );
+                            setState(() {});
                           },
                         ),
                         TextButton(
@@ -165,7 +167,7 @@ class _MenuDishState extends State<Menu_Dish> {
                           // Text('${dishes[index].iddish}'),
                           Text(
                             dishes[index].namedish,
-                        style: TextStyle(fontWeight: FontWeight.bold,
+                        style: const TextStyle(fontWeight: FontWeight.bold,
                           color: Color.fromRGBO(109, 117, 208, 0.8),
                           fontSize: 16),
                           ),
