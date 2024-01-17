@@ -28,6 +28,7 @@ class _OrderDishPageState extends State<OrderDishPage> {
   int numberOfDishes = 0;
   List<Dish> selectedDishes = [];
   List<Dish> orderedDishes =[];
+  List<TableB> tables = [];
   double totalAmount = 0.0;
   // Order order;
   List<Dish> allDishes = [];
@@ -305,6 +306,7 @@ class _OrderDishPageState extends State<OrderDishPage> {
                   ),
             ElevatedButton(
               onPressed: () async {
+
                 if (selectedTable == null) {
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(content: Text('Vui lòng chọn một bàn trước khi tạo đơn hàng.')),
@@ -325,6 +327,7 @@ class _OrderDishPageState extends State<OrderDishPage> {
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(
                           content: Text('Đơn hàng đã được tạo thành công!')),
+
                     );
                   } catch (e) {
                     // // Hiển thị thông báo lỗi
@@ -348,7 +351,8 @@ class _OrderDishPageState extends State<OrderDishPage> {
       ),
     );
   }
-
+  static void updateTableStatus(String tableName, String newStatus) {
+  }
   void addDish(Dish dish) {
     setState(() {
       numberOfDishes++;
