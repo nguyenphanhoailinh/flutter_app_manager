@@ -20,9 +20,9 @@ class PayMentPage extends StatefulWidget {
 class _PayMentPageState extends State<PayMentPage> {
   List<TableB> tables = [];
   Dio dio = Dio(BaseOptions(baseUrl: "http://localhost:8888/api/v1/orders"));
-
+  Dio dio1 = Dio(BaseOptions(baseUrl: "http://localhost:8888/api/v1/bill"));
   Future<Bill> fetchReportOrder(int id) async{
-    final reponse =await dio.get('/report/$id');
+    final reponse =await dio1.get('/$id');
     if(reponse.statusCode == 200){
       print(reponse.data);
       return Bill.fromJson(reponse.data);

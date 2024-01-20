@@ -17,11 +17,11 @@ class BillPage extends StatefulWidget {
 class _BillPageState extends State<BillPage> {
   List<TableB> tables = [];
   List<Bill> bills=[];
-  Dio dio = Dio(BaseOptions(baseUrl: "http://localhost:8888/api/v1/orders"));
+  Dio dio = Dio(BaseOptions(baseUrl: "http://localhost:8888/api/v1/bill"));
 
   Future<List<Bill>> fetchBill() async {
     try {
-      final response = await dio.get("/bill/all");
+      final response = await dio.get("/all");
 
       if (response.statusCode == 200) {
         List<dynamic> jsonResponse = response.data;

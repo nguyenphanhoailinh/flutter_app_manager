@@ -25,7 +25,7 @@ class MyApp extends StatelessWidget {const MyApp({super.key});
         '/bill':(context) => BillPage(),
       },
       home: Scaffold(
-        body: HomePage(),
+        body: LoginForm(),
       ),
     );
   }

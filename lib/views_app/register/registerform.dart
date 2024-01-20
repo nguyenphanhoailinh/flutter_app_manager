@@ -13,7 +13,7 @@ class _RegisterFormState extends State<RegisterForm> {
   final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _fullnameController = TextEditingController();
-  Dio dio = Dio(BaseOptions(baseUrl: "http://localhost:8888/api/v1/auth"));
+  Dio dio = Dio(BaseOptions(baseUrl: "http://localhost:8889/api/v1/auth"));
 
   Future<void> _register() async {
     final String username = _usernameController.text;

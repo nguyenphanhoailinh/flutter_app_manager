@@ -14,7 +14,7 @@ class LoginForm extends StatefulWidget {
 class _LoginFormState extends State<LoginForm> {
   final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-  Dio dio = Dio(BaseOptions(baseUrl: "http://localhost:8888/api/v1/auth"));
+  Dio dio = Dio(BaseOptions(baseUrl: "http://localhost:8889/api/v1/auth"));
 
   Future<void> _login() async {
     final String username = _usernameController.text;
