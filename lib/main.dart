@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_app_manager/views_app/Admin_ProductManagement/view_product/productpage.dart';
 import 'package:flutter_app_manager/views_app/View_Menu/CreateDishPage.dart';
 import 'package:flutter_app_manager/views_app/View_Table/create_Table.dart';
 import 'package:flutter_app_manager/views_app/View_Table/menu_Table.dart';
@@ -23,9 +24,10 @@ class MyApp extends StatelessWidget {const MyApp({super.key});
         '/home':(context) => HomePage(),
         '/login':(context) => LoginForm(),
         '/bill':(context) => BillPage(),
+        '/ingredients':(context) => ProductPage(),
       },
       home: Scaffold(
-        body: LoginForm(),
+        body: ProductPage(),
       ),
     );
   }
