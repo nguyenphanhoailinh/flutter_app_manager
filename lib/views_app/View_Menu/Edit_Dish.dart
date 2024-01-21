@@ -128,16 +128,11 @@ class _EditDishPageState extends State<EditDishPage> {
             ),
             SizedBox(height: 10),
             ElevatedButton(
-
-
               style: ElevatedButton.styleFrom(
                 backgroundColor: Color.fromRGBO(109, 117, 208, 0.8),
                 minimumSize: const Size(50, 50),
-
-
               ),
               onPressed: _pickImage,
-
               child: const Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -146,7 +141,6 @@ class _EditDishPageState extends State<EditDishPage> {
                   Text('Chọn hình ảnh mới'),
                 ],
               ),
-
             ),
             const SizedBox(height: 10),
             ElevatedButton(

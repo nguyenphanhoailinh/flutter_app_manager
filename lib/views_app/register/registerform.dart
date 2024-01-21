@@ -29,38 +29,38 @@ class _RegisterFormState extends State<RegisterForm> {
       );
       return;
     }
+
     try {
-      final response = await dio.post("/signin",
-          data: User(username: username, password: 'dummy_password', fullname: fullname).toJson());
-      if (response.statusCode == 200 || response.statusCode == 401) {
+      final response = await dio.post("/signup",
+          data: User(username: username, password: password, fullname: fullname, role: 'admin').toJson());
+      if (response.statusCode == 200) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Đăng ký thành công'),
+            backgroundColor: Colors.green,
+          ),
+        );
+      } else {
+        // Xử lý đăng ký thất bại
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Đăng ký thất bại'),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
+    } catch (e) {
+      if (e is DioError && e.response?.statusCode == 401) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
             content: Text('Email đã được tạo tài khoản'),
             backgroundColor: Colors.red,
           ),
         );
-        return;
+      } else {
+        // Xử lý lỗi khác
+        print(e);
       }
-    } catch (e) {
-    }
-
-    final response = await dio.post("/signup",
-        data: User(username: username, password: password, fullname: fullname).toJson());
-    if (response.statusCode == 200) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Đăng ký thành công'),
-          backgroundColor: Colors.green,
-        ),
-      );
-    } else {
-      // Xử lý đăng ký thất bại
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Đăng ký thất bại'),
-          backgroundColor: Colors.red,
-        ),
-      );
     }
   }
 

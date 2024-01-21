@@ -1,4 +1,5 @@
 class Ingredient{
+  int idingredient;
   String nameingredient;
   String imagefilename;
   int soluong;
@@ -8,6 +9,7 @@ class Ingredient{
   DateTime ngaygionhap;
   String loainguyenlieu;
 Ingredient ({
+  required this.idingredient,
     required this.nameingredient,
     required this.imagefilename,
   required this.soluong,
@@ -19,6 +21,7 @@ Ingredient ({
 });
 factory Ingredient.fromJson(Map<String, dynamic> json){
   return Ingredient(
+      idingredient: json['idingredient'] as int,
       nameingredient: json['nameingredient'] ,
       imagefilename: json['imagefilename'],
       soluong: json['soluong'] as int,
@@ -31,6 +34,7 @@ factory Ingredient.fromJson(Map<String, dynamic> json){
 }
 Map<String, dynamic > toJson(){
   return {
+    'idingredient':idingredient,
     'nameingredient': nameingredient,
     'imagefilename': imagefilename,
     'soluong': soluong,

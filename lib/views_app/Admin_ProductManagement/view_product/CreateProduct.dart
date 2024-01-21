@@ -1,7 +1,7 @@
 import 'dart:html';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-
+import 'package:image_picker/image_picker.dart';
 import '../../../models/ingredient.dart';
 
 class CreateProductPage extends StatefulWidget {
@@ -10,127 +10,149 @@ class CreateProductPage extends StatefulWidget {
 }
 
 class _CreateProductPageState extends State<CreateProductPage> {
-  final _formKey = GlobalKey<FormState>();
-  Ingredient newIngredient = Ingredient(
-    nameingredient: '',
-    imagefilename: '',
-    soluong: 0,
-    price: 0.0,
-    totalprice: 0.0,
-    xuatsu: '',
-    ngaygionhap: DateTime.now(),
-    loainguyenlieu: '',
-  );
 
   Dio dio = Dio(BaseOptions(baseUrl: "http://localhost:8818/api/v1/ingredient"));
-  FileUploadInputElement? _uploadInputElement;
+  String? _imageUrl;
+  final ImagePicker _picker = ImagePicker();
+  final TextEditingController _nameingredientController = TextEditingController();
+  final TextEditingController _priceController = TextEditingController();
+  final TextEditingController _soluongController = TextEditingController();
+  final TextEditingController _totalpriceController = TextEditingController();
+  final TextEditingController _xuatsuController = TextEditingController();
+ final TextEditingController _ngaygionhapController = TextEditingController();
 
-  void pickImage() {
-    _uploadInputElement = FileUploadInputElement()..accept = 'image/*';
-    _uploadInputElement!.click();
+  final TextEditingController _loainguyenlieuController = TextEditingController();
 
-    _uploadInputElement!.onChange.listen((event) {
-      final file = _uploadInputElement!.files!.first;
-      final reader = FileReader();
+  XFile? pickedImage;
+  void _pickImage() async {
+    pickedImage = await _picker.pickImage(source: ImageSource.gallery);
 
-      reader.readAsDataUrl(file);
-      reader.onLoadEnd.listen((event) {
-        setState(() {
-          newIngredient.imagefilename = reader.result as String;
-        });
-      });
+    setState(() {
+      _imageUrl = pickedImage!.path;
     });
   }
-
   Future<void> createIngredient() async {
-    if (newIngredient.imagefilename == null) return;
-
-    FormData formData = FormData.fromMap({
-      "nameingredient": newIngredient.nameingredient,
-      "soluong": newIngredient.soluong,
-      "price": newIngredient.price,
-      "totalprice": newIngredient.totalprice,
-      "xuatsu": newIngredient.xuatsu,
-      "ngaygionhap": newIngredient.ngaygionhap.toIso8601String(),
-      "loainguyenlieu": newIngredient.loainguyenlieu,
-      "image": newIngredient.imagefilename,
-    });
-
     try {
-      var response = await dio.post("/create", data: formData);
-      if (response.statusCode == 200) {
-        print("Ingredient created successfully");
+
+      if (pickedImage != null) {
+        FormData formData = FormData.fromMap({
+          'image': await MultipartFile.fromBytes( await pickedImage!.readAsBytes(),filename: pickedImage!.name),
+          'nameingredient': _nameingredientController.text,
+          'soluong':_soluongController.text,
+          'price': double.parse(_priceController.text),
+          'totalprice':double.parse(_totalpriceController.text),
+          'xuatsu':_xuatsuController.text,
+          'loainguyenlieu':_loainguyenlieuController.text,
+          'ngaygionhap': DateTime.now().toIso8601String(),
+        });
+
+        final response = await dio.post("/create", data: formData);
+        if (response.statusCode == 200) {
+
+          print("product created successfully");
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Tạo thành công'),
+              backgroundColor: Colors.green,
+            ),
+          );
+        } else {
+          print("Failed to create dish");
+        }
       } else {
-        print("Ingredient creation failed");
+        print("No image selected");
       }
-    } catch (e) {
-      print(e);
+    } catch (error) {
+      print("Failed to connect to API + formData");
     }
+  }
+  void calculateTotalPrice() {
+    int soluong = int.parse(_soluongController.text);
+    double price = double.parse(_priceController.text);
+
+    double totalprice = soluong * price;
+
+    _totalpriceController.text = totalprice.toString();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Create New Ingredient'),
+        title: Text('Nguyên liệu mới'),
       ),
-      body: Form(
-        key: _formKey,
-        child: Column(
-          children: <Widget>[
-            TextFormField(
-              decoration: InputDecoration(labelText: 'Ingredient Name'),
-              onSaved: (value) {
-                newIngredient.nameingredient = value ?? '';
-              },
-            ),
-            TextFormField(
-              decoration: InputDecoration(labelText: 'Quantity'),
-              keyboardType: TextInputType.number,
-              onSaved: (value) {
-                newIngredient.soluong = int.parse(value ?? '0');
-              },
-            ),
-            TextFormField(
-              decoration: InputDecoration(labelText: 'Price'),
-              keyboardType: TextInputType.number,
-              onSaved: (value) {
-                newIngredient.price = double.parse(value ?? '0.0');
-              },
-            ),
-            TextFormField(
-              decoration: InputDecoration(labelText: 'Total Price'),
-              keyboardType: TextInputType.number,
-              onSaved: (value) {
-                newIngredient.totalprice = double.parse(value ?? '0.0');
-              },
-            ),
-            TextFormField(
-              decoration: InputDecoration(labelText: 'Origin'),
-              onSaved: (value) {
-                newIngredient.xuatsu = value ?? '';
-              },
-            ),
-            TextFormField(
-              decoration: InputDecoration(labelText: 'Type of Ingredient'),
-              onSaved: (value) {
-                newIngredient.loainguyenlieu = value ?? '';
-              },
-            ),
-            ElevatedButton(
-              onPressed: pickImage,
-              child: Text('Pick Image'),
-            ),
-            ElevatedButton(
-              onPressed: () {
-                if (_formKey.currentState!.validate()) {
-                  _formKey.currentState!.save();
-                  createIngredient();
-                }
-              },
-              child: Text('Submit'),
-            ),
-          ],
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(
+            children: <Widget>[
+              GestureDetector(
+                onTap: _pickImage,
+                child: Container(
+                  height: 150,
+                  width: 150,
+                  decoration: BoxDecoration(
+                    color: Colors.grey[200],
+                    borderRadius: BorderRadius.circular(75),
+                  ),
+                  child: _imageUrl != null
+                      ? ClipRRect(
+                    borderRadius: BorderRadius.circular(75),
+                    child: Image.network(
+                      _imageUrl!,
+                      fit: BoxFit.cover,
+                    ),
+                  )
+                      : const Icon(
+                    Icons.camera_enhance,
+                    size: 40,
+                    color: Colors.grey,
+                  ),
+                ),
+              ),
+              TextField(
+                controller: _nameingredientController,
+                decoration: InputDecoration(labelText: 'Tên nguyên liệu'),
+              ),
+              TextField(
+                controller: _priceController,
+                decoration: InputDecoration(labelText: 'Giá'),
+                keyboardType: TextInputType.number,
+                onChanged: (value) {
+                  calculateTotalPrice();
+                },
+              ),
+              TextField(
+                controller: _soluongController,
+                decoration: InputDecoration(labelText: 'Số lượng'),
+                onChanged: (value) {
+                  calculateTotalPrice();
+                },
+              ),
+              TextField(
+                controller: _totalpriceController,
+                decoration: InputDecoration(labelText: 'Tổng giá'),
+                keyboardType: TextInputType.number,
+              ),
+              TextField(
+                controller: _xuatsuController,
+                decoration: InputDecoration(labelText: 'Xuất sứ'),
+              ),
+              TextField(
+                controller: _loainguyenlieuController,
+                decoration: InputDecoration(labelText: 'Loại nguyên liệu'),
+              ),
+              // TextField(
+              //   controller: _ngaygionhapController,
+              //   decoration: InputDecoration(labelText: 'Ngày giờ nhập'),
+              // ),
+
+              ElevatedButton(
+                onPressed: createIngredient,
+                child: Text('Tạo nguyên liệu'),
+              ),
+            ],
+          ),
         ),
       ),
     );

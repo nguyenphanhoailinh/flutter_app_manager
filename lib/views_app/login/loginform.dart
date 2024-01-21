@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter_app_manager/models/signin.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
@@ -19,11 +21,8 @@ class _LoginFormState extends State<LoginForm> {
   Future<void> _login() async {
     final String username = _usernameController.text;
     final String password = _passwordController.text;
-    if (username
-        .trim()
-        .isEmpty || password
-        .trim()
-        .isEmpty) {
+
+    if (username.trim().isEmpty || password.trim().isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text('Bạn chưa nhập các trường'),
@@ -36,11 +35,23 @@ class _LoginFormState extends State<LoginForm> {
     try {
       final response = await dio.post("/signin",
           data: User(username: username, password: password).toJson());
+      print(response.data);
+
       if (response.statusCode == 200) {
-        Navigator.pushNamed(context, '/home');
+        // final user = User.fromJson(jsonDecode(response.data) ?? {});
+        // final jwt = response.data['token']?.toString() ?? '';
+        // final String role = response.data['role']?.toString() ?? '';
+        if (username == 'admin001' && password =='123456') {
+          Navigator.pushNamed(context, '/ingredients');
+        } else if (username == 'user001' && password =='123456') {
+          Navigator.pushNamed(context, '/home');
+        }
+
       }
     } catch (e) {
+      print('err:$e');
       if (e is DioError) {
+
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
             content: Text('Vui lòng kiểm tra lại email hoặc mật khẩu của bạn'),
@@ -50,6 +61,8 @@ class _LoginFormState extends State<LoginForm> {
       }
     }
   }
+
+
 
   @override
   Widget build(BuildContext context) {

@@ -70,14 +70,14 @@ class _MenuDishState extends State<Menu_Dish> {
         title: Text('Danh sách món ăn '),
         automaticallyImplyLeading: false,
         leading: IconButton(
-          icon: Icon(Icons.chevron_left, color: Colors.white),
+          icon: const Icon(Icons.chevron_left, color: Colors.white),
           onPressed: () => Navigator.pushReplacementNamed(context, '/home'),
         ),
         backgroundColor: Color.fromRGBO(109, 117, 208, 0.8),
         actions: <Widget>[
 
           PopupMenuButton<String>(
-            icon: Icon(Icons.add_to_photos),
+            icon: const Icon(Icons.add_to_photos),
             onSelected: (String result) {
                   Navigator.push(
                     context,
